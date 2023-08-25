@@ -14,10 +14,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Schedule extends AbstractEntity {
@@ -31,7 +35,7 @@ public class Schedule extends AbstractEntity {
     @Enumerated(STRING)
     private Emotion emotion;
 
-    @OneToMany(mappedBy = "schedule", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany
     private List<ScheduleImage> scheduleImage = new ArrayList<>();
 
     private String title;
@@ -47,5 +51,9 @@ public class Schedule extends AbstractEntity {
         this.content = content;
         this.scheduleImage = scheduleImages;
         this.emotion = emotion;
+    }
+
+    public void addScheduleImage(List<ScheduleImage> scheduleImage) {
+        this.scheduleImage = scheduleImage;
     }
 }
