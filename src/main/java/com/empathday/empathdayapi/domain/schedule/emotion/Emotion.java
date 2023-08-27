@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.domain.schedule;
+package com.empathday.empathdayapi.domain.schedule.emotion;
 
 import lombok.Getter;
 

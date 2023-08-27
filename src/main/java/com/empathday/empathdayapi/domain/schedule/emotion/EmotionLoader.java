@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.domain.schedule;
+package com.empathday.empathdayapi.domain.schedule.emotion;
 
 import com.empathday.empathdayapi.infrastructure.schedule.EmotionRepository;
 import javax.annotation.PostConstruct;

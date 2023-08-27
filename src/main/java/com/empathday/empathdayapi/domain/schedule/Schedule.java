@@ -1,23 +1,34 @@
 package com.empathday.empathdayapi.domain.schedule;
 
+import static java.util.Collections.EMPTY_LIST;
 import static javax.persistence.EnumType.STRING;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
+import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
+import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
+import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.util.CollectionUtils;
 
 @Getter
 @Builder
@@ -29,31 +40,63 @@ public class Schedule extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private LocalDate scheduleDate;
+    private String title;
+    private String content;
+
+    @ColumnDefault("false")
+    @Column(columnDefinition = "TINYINT(1)")
+    private boolean isPublic;
 
     @Enumerated(STRING)
     private Emotion emotion;
 
+    private Long userId;
+
     @OneToMany
-    private List<ScheduleImage> scheduleImage = new ArrayList<>();
+    @JoinTable(name = "schedule_associate_image",
+        joinColumns = @JoinColumn(name = "schedule_id"),
+        inverseJoinColumns = @JoinColumn(name = "schedule_image_id")
+    )
+    private List<ScheduleImage> scheduleImages = new ArrayList<>();
 
-    private String title;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST)
+    private List<Todo> todos = new ArrayList<>();
 
-    private String content;
-
-    public Schedule(List<ScheduleImage> scheduleImage) {
-        this.scheduleImage = scheduleImage;
-    }
-
-    public Schedule(String title, String content, List<ScheduleImage> scheduleImages, Emotion emotion) {
+    /** 생성 메서드 **/
+    public Schedule(
+        Long userId, LocalDate scheduleDate, String title, String content,
+        List<ScheduleImage> scheduleImages, Emotion emotion, boolean isPublic
+    ) {
+        this.userId = userId;
+        this.scheduleDate = scheduleDate;
         this.title = title;
         this.content = content;
-        this.scheduleImage = scheduleImages;
+        this.scheduleImages = scheduleImages;
         this.emotion = emotion;
+        this.isPublic = isPublic;
+    }
+
+    public static Schedule of(
+        Long userId, LocalDate scheduleDate, String title, String content,
+        List<ScheduleImage> scheduleImage, Emotion emotion, boolean isPublic
+    ) {
+        return new Schedule(
+            userId,
+            scheduleDate,
+            StringUtils.isNotBlank(title) ? title : "",
+            StringUtils.isNotBlank(content) ? content : "",
+            scheduleImage,
+            emotion,
+            isPublic
+        );
     }
 
     public void addScheduleImage(List<ScheduleImage> scheduleImage) {
-        this.scheduleImage = scheduleImage;
+        this.scheduleImages = scheduleImage;
+    }
+
+    public void addScheduleTodos(List<Todo> todos) {
+        this.todos = todos;
     }
 }
