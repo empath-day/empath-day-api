@@ -1,8 +1,13 @@
 package com.empathday.empathdayapi.common.response;
 
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
+
+import com.empathday.empathdayapi.common.exception.BaseException;
 import com.google.common.collect.Lists;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,5 +35,24 @@ public class CommonControllerAdvice {
 //        log.error("eventId = {} ", eventId, e);
         log.error("error cause is {}", e.getMessage());
         return CommonResponse.fail(ErrorCode.COMMON_SYSTEM_ERROR);
+    }
+
+    /**
+     * http status: 200 AND result: FAIL
+     * 시스템은 이슈 없고, 비즈니스 로직 처리에서 에러가 발생함
+     *
+     * @param e
+     * @return
+     */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(value = BaseException.class)
+    public CommonResponse onBaseException(BaseException e) {
+        if (ERROR_CODE_LIST.contains(e.getErrorCode())) {
+            log.error("[BaseException] cause = {}, errorMsg = {}", getMostSpecificCause(e), getMostSpecificCause(e).getMessage());
+        } else {
+            log.warn("[BaseException] cause = {}, errorMsg = {}", getMostSpecificCause(e), getMostSpecificCause(e).getMessage());
+        }
+        return CommonResponse.fail(e.getMessage(), e.getErrorCode().name());
     }
 }
