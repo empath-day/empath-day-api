@@ -1,7 +1,5 @@
 package com.empathday.empathdayapi.api.service.schedule;
 
-import static java.util.Collections.EMPTY_LIST;
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 

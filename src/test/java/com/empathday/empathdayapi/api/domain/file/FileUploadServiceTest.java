@@ -1,8 +1,9 @@
-package com.empathday.empathdayapi.domain.file;
+package com.empathday.empathdayapi.api.domain.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.amazonaws.HttpMethod;
+import com.empathday.empathdayapi.domain.file.FileUploadService;
 import java.net.URISyntaxException;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.DisplayName;
