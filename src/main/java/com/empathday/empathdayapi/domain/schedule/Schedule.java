@@ -53,6 +53,7 @@ public class Schedule extends AbstractEntity {
 
     private Long userId;
 
+    @Builder.Default
     @OneToMany
     @JoinTable(name = "schedule_associate_image",
         joinColumns = @JoinColumn(name = "schedule_id"),
@@ -60,6 +61,7 @@ public class Schedule extends AbstractEntity {
     )
     private List<ScheduleImage> scheduleImages = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST)
     private List<Todo> todos = new ArrayList<>();
 

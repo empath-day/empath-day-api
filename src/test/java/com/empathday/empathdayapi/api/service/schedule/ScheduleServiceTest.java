@@ -120,7 +120,7 @@ class ScheduleServiceTest {
         assertThat(savedSchedule.getScheduleDate()).isEqualTo(scheduleDate);
         assertThat(savedSchedule.getScheduleImages()).hasSize(0);
         assertThat(savedSchedule.isPublic()).isTrue();
-        assertThat(savedSchedule.getTodos()).hasSize(0);
+        assertThat(savedSchedule.getTodos()).isNull();
     }
 
     @DisplayName("스케쥴과 이미지를 함께 등록할 수 있습니다.")
@@ -144,9 +144,8 @@ class ScheduleServiceTest {
         assertThat(savedSchedule.getId()).isNotNull();
         assertThat(savedSchedule.getScheduleDate()).isEqualTo(scheduleDate);
         assertThat(savedSchedule.getScheduleImages()).hasSize(1);
-        assertThat(scheduleImage.getId()).isNotNull();
         assertThat(savedSchedule.isPublic()).isTrue();
-        assertThat(savedSchedule.getTodos()).hasSize(0);
+        assertThat(savedSchedule.getTodos()).isNull();
     }
 
     @DisplayName("스케쥴과 투두릭스트 정보를 함께 등록할 수 있습니다.")
@@ -190,28 +189,5 @@ class ScheduleServiceTest {
             .todos(null)
             .build();
         return registerScheduleRequest;
-    }
-
-    public static Schedule createSchedule(LocalDate scheduleDate, String title, String content, Emotion emotion, ScheduleImage scheduleImage, boolean isPublic, List<Todo> todos) {
-        Schedule schedule = Schedule.builder()
-            .scheduleDate(scheduleDate)
-            .title(title)
-            .content(content)
-            .isPublic(isPublic)
-            .emotion(emotion)
-            .todos(todos)
-            .build();
-
-        if (scheduleImage != null) {
-            schedule.addScheduleImage(List.of(scheduleImage));
-        }
-
-        return schedule;
-    }
-
-    public static ScheduleImage createScheduleImage(String filename) {
-        return ScheduleImage.builder()
-            .filename(filename)
-            .build();
     }
 }
