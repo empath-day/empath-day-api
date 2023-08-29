@@ -37,7 +37,7 @@ spring:
       ddl-auto: create
 
   datasource:
-    url: ${RDS_DB_URL}/${RDS_DB_NAME}
+    url: ${RDS_DB_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}

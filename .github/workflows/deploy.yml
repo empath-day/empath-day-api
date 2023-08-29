@@ -24,7 +24,7 @@ jobs:
         with:
           files: ./src/main/resources/application.yml
         env:
-          spring.datasource.url: ${{ secrets.RDS_DB_URL }}/${{ secrets.RDS_DB_NAME}}
+          spring.datasource.url: ${{ secrets.RDS_DB_URL }}
           spring.datasource.username: ${{ secrets.RDS_USERNAME }}
           spring.datasource.password: ${{ secrets.RDS_PASSWORD }}
 
