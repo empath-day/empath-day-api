@@ -35,9 +35,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-
-  datasource:
-    url: jdbc:mysql://empathy-day.cgxrqrpcfta0.ap-northeast-2.rds.amazonaws.com:3306/ebdb
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: empathy
-    password: empathyday
