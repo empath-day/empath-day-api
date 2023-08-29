@@ -1,8 +1,8 @@
 spring:
   profiles:
-    active : local
+    active : dev
     include:
-      - secret
+      - dev
 
 #p6spy query logging
 decorator:
