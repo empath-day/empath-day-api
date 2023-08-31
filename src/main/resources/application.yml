@@ -1,15 +1,8 @@
 spring:
   profiles:
-    active : dev
+    active : local
     include:
       - dev
-
-#p6spy query logging
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true
-
 ---
 spring:
   config:
@@ -25,13 +18,3 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  jpa:
-    hibernate:
-      ddl-auto: create

@@ -5,6 +5,7 @@ import static com.empathday.empathdayapi.common.response.CommonResponse.success;
 import com.empathday.empathdayapi.common.response.CommonResponse;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class ScheduleController {
 
     @PostMapping("/api/v1/schedule")
     public CommonResponse createSchedule(
-        @RequestBody RegisterScheduleRequest request
+        @Valid @RequestBody RegisterScheduleRequest request
     ) {
         scheduleService.createSchedule(request);
 

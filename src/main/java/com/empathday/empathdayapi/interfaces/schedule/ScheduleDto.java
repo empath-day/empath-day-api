@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class ScheduleDto {
         private String title;
         private String content;
         private Long imageId;
+        @NotEmpty(message = "감정 표현을 선택해주세요.")
         private Emotion emotion;
         private boolean isPublic;
         private List<String> todos;

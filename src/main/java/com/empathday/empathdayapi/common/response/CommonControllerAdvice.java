@@ -1,5 +1,6 @@
 package com.empathday.empathdayapi.common.response;
 
+import static com.empathday.empathdayapi.common.response.ErrorCode.COMMON_INVALID_PARAMETER;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
 import com.empathday.empathdayapi.common.exception.BaseException;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,5 +56,10 @@ public class CommonControllerAdvice {
             log.warn("[BaseException] cause = {}, errorMsg = {}", getMostSpecificCause(e), getMostSpecificCause(e).getMessage());
         }
         return CommonResponse.fail(e.getMessage(), e.getErrorCode().name());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Object processValidationError(MethodArgumentNotValidException ex) {
+        return CommonResponse.fail(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage(), COMMON_INVALID_PARAMETER.name());
     }
 }
