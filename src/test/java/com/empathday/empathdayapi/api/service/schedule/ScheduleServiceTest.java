@@ -12,6 +12,7 @@ import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepositor
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.todo.TodoRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @SpringBootTest
 class ScheduleServiceTest {
 
@@ -174,6 +177,38 @@ class ScheduleServiceTest {
             .containsExactlyInAnyOrder(
                 tuple(1L, "오늘 하루는~~"),
                 tuple(2L, "피곤한 하루다~~")
+            );
+    }
+
+    @DisplayName("스케줄의 상세정보를 조회할 수 있다.")
+    @Test
+    void retrieveScheduleDetail() {
+        // given
+        LocalDate scheduleDate = LocalDate.of(2023, 8, 25);
+        String title = "";
+        String content = "";
+        Emotion emotion = Emotion.SO_BAD;
+        RegisterScheduleRequest registerScheduleRequest = createScheduleRequest(scheduleDate, title, content, emotion);
+        ArrayList<String> todoContents = new ArrayList<>();
+        todoContents.addAll(List.of("오늘 하루는~~", "피곤한 하루다~~"));
+        registerScheduleRequest.setTodoContents(todoContents);
+
+        Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
+
+        // when
+        RetrieveScheduleResponse result = scheduleService.retrieveScheduleDetail(savedSchedule.getId()).getScheduleResponse();
+
+        // then
+        assertThat(result.getScheduleDate()).isEqualTo(scheduleDate);
+        assertThat(result.getTitle()).isEqualTo(title);
+        assertThat(result.getContent()).isEqualTo(content);
+        assertThat(result.getEmotion()).isEqualTo(emotion);
+        assertThat(result.getImageResponses()).hasSize(0);
+        assertThat(result.getTodoResponses()).hasSize(2)
+            .extracting("content", "isCompleted")
+            .containsExactly(
+                tuple("오늘 하루는~~", false),
+                tuple("피곤한 하루다~~", false)
             );
     }
 

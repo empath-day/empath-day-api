@@ -33,12 +33,20 @@ public class Todo extends AbstractEntity {
 
     private String content;
 
-    public Todo(Schedule schedule, String todoContent) {
+    private boolean isCompleted;
+
+    @Builder
+    private Todo(Schedule schedule, String content, boolean isCompleted) {
         this.schedule = schedule;
-        this.content = todoContent;
+        this.content = content;
+        this.isCompleted = isCompleted;
     }
 
-    public static Todo of(Schedule schedule, String todoContent) {
-        return new Todo(schedule, todoContent);
+    public static Todo of(Schedule schedule, String content) {
+        return Todo.builder()
+            .schedule(schedule)
+            .content(content)
+            .isCompleted(false)
+            .build();
     }
 }

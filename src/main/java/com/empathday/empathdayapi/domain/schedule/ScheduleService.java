@@ -7,14 +7,18 @@ import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepositor
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.todo.TodoRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class ScheduleService {
 
@@ -30,6 +34,13 @@ public class ScheduleService {
         return scheduleImage.getId();
     }
 
+    /**
+     * 스케줄을 등록합니다.
+     *
+     * @param request
+     * @return
+     */
+    @Transactional
     public Schedule createSchedule(RegisterScheduleRequest request) {
         ScheduleImage scheduleImage = null;
         if (request.imageExists()) {
@@ -51,5 +62,18 @@ public class ScheduleService {
         return request.getTodos().stream()
             .map(todoContent -> Todo.of(schedule, todoContent))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 스케줄 상세 정보를 조회합니다.
+     *
+     * @param id    스케줄 ID
+     */
+    public RetrieveScheduleMainResponse retrieveScheduleDetail(Long id) {
+        Schedule findSchedule = scheduleRepository.findById(id).orElseThrow(
+            () -> new InvalidParamException()
+        );
+
+        return RetrieveScheduleMainResponse.of(RetrieveScheduleResponse.fromEntity(findSchedule));
     }
 }

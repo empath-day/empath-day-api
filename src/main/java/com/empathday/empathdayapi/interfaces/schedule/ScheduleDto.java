@@ -6,10 +6,12 @@ import com.empathday.empathdayapi.common.utils.NumberUtils;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
+import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,6 +66,79 @@ public class ScheduleDto {
 
         public void setTodoContents(ArrayList<String> todoContents) {
             this.todos = todoContents;
+        }
+    }
+
+    /** response **/
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor(staticName = "of")
+    public static class RetrieveScheduleMainResponse {
+
+        private RetrieveScheduleResponse scheduleResponse;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RetrieveScheduleResponse {
+
+        private Long id;
+        private LocalDate scheduleDate;
+        private String title;
+        private String content;
+        private Emotion emotion;
+        private boolean isPublic;
+        private List<ScheduleImageResponse> imageResponses;
+        private List<TodoResponse> todoResponses;
+
+        public static RetrieveScheduleResponse fromEntity(Schedule schedule) {
+            return RetrieveScheduleResponse.builder()
+                .id(schedule.getId())
+                .scheduleDate(schedule.getScheduleDate())
+                .title(schedule.getTitle())
+                .content(schedule.getContent())
+                .emotion(schedule.getEmotion())
+                .isPublic(schedule.isPublic())
+                .imageResponses(ScheduleImageResponse.fromEntity(schedule.getScheduleImages()))
+                .todoResponses(TodoResponse.fromEntity(schedule.getTodos()))
+                .build();
+        }
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor(staticName = "of")
+    public static class ScheduleImageResponse {
+
+        private Long id;
+        private String filename;
+
+        public static List<ScheduleImageResponse> fromEntity(List<ScheduleImage> scheduleImages) {
+            return scheduleImages.stream()
+                .map(image -> ScheduleImageResponse.of(image.getId(), image.getFilename()))
+                .collect(Collectors.toList());
+        }
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor(staticName = "of")
+    public static class TodoResponse {
+
+        private Long id;
+        private String content;
+        private boolean isCompleted;
+
+        public static List<TodoResponse> fromEntity(List<Todo> todos) {
+            return todos.stream()
+                .map(todo -> TodoResponse.of(todo.getId(), todo.getContent(), todo.isCompleted()))
+                .collect(Collectors.toList());
         }
     }
 }
