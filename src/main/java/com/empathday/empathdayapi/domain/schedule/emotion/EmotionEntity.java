@@ -26,7 +26,10 @@ public class EmotionEntity extends AbstractEntity {
     @Enumerated(STRING)
     private Emotion emotion;
 
+    private String emotionImageUrl;
+
     public EmotionEntity(Emotion emotion) {
         this.emotion = emotion;
+        this.emotionImageUrl = emotion.getEmotionImageUrl();
     }
 }

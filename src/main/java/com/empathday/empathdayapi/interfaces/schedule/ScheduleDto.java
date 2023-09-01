@@ -7,8 +7,8 @@ import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,6 +77,7 @@ public class ScheduleDto {
     public static class RetrieveScheduleMainResponse {
 
         private RetrieveScheduleResponse scheduleResponse;
+        private DefaultCalendarInfo calendarInfo;
     }
 
     @Getter
@@ -84,27 +85,15 @@ public class ScheduleDto {
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RetrieveScheduleResponse {
+    public static class DefaultCalendarInfo {
 
-        private Long id;
-        private LocalDate scheduleDate;
-        private String title;
-        private String content;
-        private Emotion emotion;
-        private boolean isPublic;
-        private List<ScheduleImageResponse> imageResponses;
-        private List<TodoResponse> todoResponses;
+        private LocalDate date;
+        private DayOfWeek day;
 
-        public static RetrieveScheduleResponse fromEntity(Schedule schedule) {
-            return RetrieveScheduleResponse.builder()
-                .id(schedule.getId())
-                .scheduleDate(schedule.getScheduleDate())
-                .title(schedule.getTitle())
-                .content(schedule.getContent())
-                .emotion(schedule.getEmotion())
-                .isPublic(schedule.isPublic())
-                .imageResponses(ScheduleImageResponse.fromEntity(schedule.getScheduleImages()))
-                .todoResponses(TodoResponse.fromEntity(schedule.getTodos()))
+        public static DefaultCalendarInfo create(LocalDate date, DayOfWeek day) {
+            return DefaultCalendarInfo.builder()
+                .date(date)
+                .day(day)
                 .build();
         }
     }
@@ -113,16 +102,57 @@ public class ScheduleDto {
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
-    public static class ScheduleImageResponse {
+    public static class RetrieveScheduleDetailMainResponse {
 
+        private RetrieveScheduleResponse scheduleResponse;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RetrieveScheduleResponse {
         private Long id;
-        private String filename;
+        private LocalDate scheduleDate;
+        private String title;
+        private String content;
+        private Emotion emotion;
+        private String emotionImageUrl;
+        private boolean isPublic;
+        private List<ScheduleImageResponse> imageResponses;
 
+        private List<TodoResponse> todoResponses;
+        public static RetrieveScheduleResponse fromEntity(Schedule schedule) {
+            return RetrieveScheduleResponse.builder()
+                .id(schedule.getId())
+                .scheduleDate(schedule.getScheduleDate())
+                .title(schedule.getTitle())
+                .content(schedule.getContent())
+                .emotion(schedule.getEmotion())
+                .emotionImageUrl(schedule.getEmotion().getEmotionImageUrl())
+                .isPublic(schedule.isPublic())
+                .imageResponses(ScheduleImageResponse.fromEntity(schedule.getScheduleImages()))
+                .todoResponses(TodoResponse.fromEntity(schedule.getTodos()))
+                .build();
+        }
+
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor(staticName = "of")
+    public static class ScheduleImageResponse {
+        private Long id;
+
+        private String filename;
         public static List<ScheduleImageResponse> fromEntity(List<ScheduleImage> scheduleImages) {
             return scheduleImages.stream()
                 .map(image -> ScheduleImageResponse.of(image.getId(), image.getFilename()))
                 .collect(Collectors.toList());
         }
+
     }
 
     @Getter
@@ -130,15 +160,15 @@ public class ScheduleDto {
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class TodoResponse {
-
         private Long id;
         private String content;
-        private boolean isCompleted;
 
+        private boolean isCompleted;
         public static List<TodoResponse> fromEntity(List<Todo> todos) {
             return todos.stream()
                 .map(todo -> TodoResponse.of(todo.getId(), todo.getContent(), todo.isCompleted()))
                 .collect(Collectors.toList());
         }
+
     }
 }

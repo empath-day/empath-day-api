@@ -1,10 +1,17 @@
 package com.empathday.empathdayapi.domain.schedule.scheduleimage;
 
+import static javax.persistence.FetchType.LAZY;
+
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
+import com.empathday.empathdayapi.domain.schedule.Schedule;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "schedule_iamges")
 public class ScheduleImage extends AbstractEntity {
 
     @Id
@@ -23,6 +31,10 @@ public class ScheduleImage extends AbstractEntity {
     private Long id;
 
     private String filename;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
     /** 생성 메서드 **/
     public ScheduleImage(String filename) {

@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ import org.springframework.util.CollectionUtils;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "schedules")
 public class Schedule extends AbstractEntity {
 
     @Id
@@ -54,11 +56,7 @@ public class Schedule extends AbstractEntity {
     private Long userId;
 
     @Builder.Default
-    @OneToMany
-    @JoinTable(name = "schedule_associate_image",
-        joinColumns = @JoinColumn(name = "schedule_id"),
-        inverseJoinColumns = @JoinColumn(name = "schedule_image_id")
-    )
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ScheduleImage> scheduleImages = new ArrayList<>();
 
     @Builder.Default

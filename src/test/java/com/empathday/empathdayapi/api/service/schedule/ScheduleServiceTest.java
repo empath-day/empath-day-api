@@ -196,7 +196,7 @@ class ScheduleServiceTest {
         Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
 
         // when
-        RetrieveScheduleResponse result = scheduleService.retrieveScheduleDetail(savedSchedule.getId()).getScheduleResponse();
+        RetrieveScheduleResponse result = scheduleService.retrieveScheduleDetail(savedSchedule.getId(), 1L).getScheduleResponse();
 
         // then
         assertThat(result.getScheduleDate()).isEqualTo(scheduleDate);

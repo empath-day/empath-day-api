@@ -34,6 +34,6 @@ public class ScheduleController {
     public CommonResponse retrieveScheduleDetail(
         @PathVariable("id") Long id
     ) {
-        return success(scheduleService.retrieveScheduleDetail(id));
+        return success(scheduleService.retrieveScheduleDetail(id, 0L));
     }
 }

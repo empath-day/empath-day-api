@@ -1,15 +1,21 @@
 package com.empathday.empathdayapi.domain.schedule;
 
+import static com.empathday.empathdayapi.common.response.ErrorCode.COMMON_ENTITY_NOT_FOUND;
+
 import com.empathday.empathdayapi.common.exception.InvalidParamException;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
-import com.empathday.empathdayapi.infrastructure.schedule.todo.TodoRepository;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.DefaultCalendarInfo;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleResponse;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +30,13 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final ScheduleImageRepository scheduleImageRepository;
-    private final TodoRepository todoRepository;
 
+    /**
+     * 스케쥴 이미지를 등록합니다.
+     *
+     * @param filename
+     * @return
+     */
     public Long createScheduleImage(String filename) {
         ScheduleImage scheduleImage = ScheduleImage.toEntity(filename);
 
@@ -69,11 +80,35 @@ public class ScheduleService {
      *
      * @param id    스케줄 ID
      */
-    public RetrieveScheduleMainResponse retrieveScheduleDetail(Long id) {
-        Schedule findSchedule = scheduleRepository.findById(id).orElseThrow(
+    public RetrieveScheduleDetailMainResponse retrieveScheduleDetail(Long id, Long userId) {
+        Schedule findSchedule = scheduleRepository.findByIdAndUserId(id, userId).orElseThrow(
             () -> new InvalidParamException()
         );
 
-        return RetrieveScheduleMainResponse.of(RetrieveScheduleResponse.fromEntity(findSchedule));
+        return RetrieveScheduleDetailMainResponse.of(RetrieveScheduleResponse.fromEntity(findSchedule));
+    }
+
+    /**
+     * 1주일치 스케줄 정보를 조회합니다.
+     *
+     * @return
+     */
+    public RetrieveScheduleMainResponse retrieveOneWeekScheduleInfo(Long userId) {
+        LocalDate currentDate = LocalDate.now();
+
+        List<DefaultCalendarInfo> oneWeekCalendar = CalendarFactory.createOneWeekCalendar(currentDate);
+
+        List<Schedule> findSchedule = scheduleRepository.findAllByScheduleDateBetween(currentDate, currentDate.plusDays(7)).orElseThrow(
+            () -> new InvalidParamException(COMMON_ENTITY_NOT_FOUND)
+        );
+
+        Map<LocalDate, DefaultCalendarInfo> map = oneWeekCalendar.stream()
+            .collect(Collectors.toMap(calendar -> calendar.getDate(), c -> c));
+
+        List<Schedule> collect = findSchedule.stream()
+            .filter(schedule -> Objects.nonNull(schedule))
+            .collect(Collectors.toList());
+
+        return null;
     }
 }
