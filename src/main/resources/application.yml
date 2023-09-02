@@ -17,10 +17,10 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
 
   datasource:
-    url: ${RDS_DB_URL}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
+    url: jdbc:mysql://localhost:3306/empath_day?autoReconnect=true
     driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
 
 ---
 spring:
