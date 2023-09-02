@@ -21,7 +21,7 @@ jobs:
 
       - name: Copy secret
         env:
-          OCCUPY_SECRET: ${{ secrets.OCCUPY_SECRET }}
+          OCCUPY_SECRET: ${{ secrets.DEV_SECRET }}
           OCCUPY_SECRET_DIR: src/main/resources
           OCCUPY_SECRET_DIR_FILE_NAME: application-dev.yml
         run: echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_DIR/$OCCUPY_SECRET_DIR_FILE_NAME
@@ -31,5 +31,5 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build -PProfile=dev --stacktrace
+        run: ./gradlew bootRun --args='--spring.profiles.active=dev'
         shell: bash

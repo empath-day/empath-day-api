@@ -1,6 +1,5 @@
 package com.empathday.empathdayapi.domain.schedule;
 
-import static java.util.Collections.EMPTY_LIST;
 import static javax.persistence.EnumType.STRING;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
@@ -9,7 +8,6 @@ import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,8 +16,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -29,7 +25,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.util.CollectionUtils;
 
 @Getter
 @Builder
