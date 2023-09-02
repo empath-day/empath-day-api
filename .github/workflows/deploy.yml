@@ -19,17 +19,17 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Check Spring Boot Profile
-        run: |
-          profile=$(./gradlew properties | grep "spring.profiles.active")
-          echo "Current Spring Boot Profile: $profile"
-
       - name: Copy secret
         env:
           OCCUPY_SECRET: ${{ secrets.DEV_SECRET }}
           OCCUPY_SECRET_DIR: src/main/resources
           OCCUPY_SECRET_DIR_FILE_NAME: application-dev.yml
         run: echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_DIR/$OCCUPY_SECRET_DIR_FILE_NAME
+
+      - name: Check Spring Boot Profile
+        run: |
+          profile=$(./gradlew properties | grep "spring.profiles.active")
+          echo "Current Spring Boot Profile: $profile"
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
