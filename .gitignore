@@ -29,7 +29,7 @@ application-secret.yml
 application-dev.yml
 application-aws.yml
 application-jwt.yml
-application-oauth.yml
+application-oauth2.yml
 
 ### NetBeans ###
 /nbproject/private/

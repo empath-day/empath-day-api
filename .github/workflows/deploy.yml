@@ -43,19 +43,19 @@ jobs:
           AWS_SECRET_DIR_FILE_NAME: application-aws.yml
         run: echo $AWS_SECRET | base64 --decode > $AWS_SECRET_DIR/$AWS_SECRET_DIR_FILE_NAME
 
-      - name: Copy oauth secret
+      - name: Copy oauth2 secret
         env:
-          OAUTH_SECRET: ${{ secrets.OAUTH_SECRET }}
-          OAUTH_SECRET_DIR: src/main/resources
-          OAUTH_SECRET_DIR_FILE_NAME: application-oauth.yml
-        run: echo $OAUTH_SECRET | base64 --decode > $OAUTH_SECRET_DIR/$OAUTH_SECRET_DIR_FILE_NAME
+          OAUTH2_SECRET: ${{ secrets.OAUTH2_SECRET }}
+          OAUTH2_SECRET_DIR: src/main/resources
+          OAUTH2_SECRET_DIR_FILE_NAME: application-oauth.yml
+        run: echo $OAUTH2_SECRET | base64 --decode > $OAUTH2_SECRET_DIR/$OAUTH2_SECRET_DIR_FILE_NAME
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build --stacktrace
+        run: ./gradlew clean build -PProfile='dev' --stacktrace
         shell: bash
 
       - name: Compress all report files
