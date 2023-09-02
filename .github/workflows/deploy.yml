@@ -16,7 +16,7 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'corretto'
+          distribution: 'oracle'
           java-version: '17'
 
       # gradle caching -> build 시간 20~30% 향상
