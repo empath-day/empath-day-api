@@ -31,6 +31,5 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: |
-          ./gradlew clean build --spring.profiles.active=dev
+        run: ./gradlew clean build
         shell: bash
