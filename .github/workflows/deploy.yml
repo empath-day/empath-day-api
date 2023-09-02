@@ -47,7 +47,7 @@ jobs:
         env:
           OAUTH2_SECRET: ${{ secrets.OAUTH2_SECRET }}
           OAUTH2_SECRET_DIR: src/main/resources
-          OAUTH2_SECRET_DIR_FILE_NAME: application-oauth.yml
+          OAUTH2_SECRET_DIR_FILE_NAME: application-oauth2.yml
         run: echo $OAUTH2_SECRET | base64 --decode > $OAUTH2_SECRET_DIR/$OAUTH2_SECRET_DIR_FILE_NAME
 
       - name: Grant execute permission for gradlew
