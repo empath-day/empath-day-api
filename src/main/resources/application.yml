@@ -4,6 +4,13 @@ spring:
     include:
       - aws
       - oauth2
+      - dev
+
+#p6spy query logging
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
 ---
 spring:
   config:
