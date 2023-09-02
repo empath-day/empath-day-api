@@ -180,7 +180,7 @@ class ScheduleServiceTest {
             );
     }
 
-    @DisplayName("스케줄의 상세정보를 조회할 수 있다.")
+    @DisplayName("스케줄의 상세정보를 조회할 수 있다")
     @Test
     void retrieveScheduleDetail() {
         // given
