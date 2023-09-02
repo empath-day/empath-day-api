@@ -19,6 +19,16 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Copy secret
         env:
           OCCUPY_SECRET: ${{ secrets.DEV_SECRET }}
@@ -28,7 +38,7 @@ jobs:
 
       - name: Check Spring Boot Profile
         run: |
-          profile=$(./gradlew properties | grep "spring.profiles.active")
+          profile=$(src/main/resources/application-dev.yml | grep "spring.profiles.active")
           echo "Current Spring Boot Profile: $profile"
 
       - name: Grant execute permission for gradlew
