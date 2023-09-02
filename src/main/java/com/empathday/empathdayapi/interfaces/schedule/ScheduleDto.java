@@ -12,12 +12,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 public class ScheduleDto {
@@ -35,7 +35,6 @@ public class ScheduleDto {
         private String title;
         private String content;
         private Long imageId;
-        @NotEmpty(message = "감정 표현을 선택해주세요.")
         private Emotion emotion;
         private boolean isPublic;
         private List<String> todos;
@@ -66,6 +65,10 @@ public class ScheduleDto {
 
         public void setTodoContents(ArrayList<String> todoContents) {
             this.todos = todoContents;
+        }
+
+        public boolean isEmotionBlank() {
+            return Emotion.isAvailable(this.emotion) == null;
         }
     }
 

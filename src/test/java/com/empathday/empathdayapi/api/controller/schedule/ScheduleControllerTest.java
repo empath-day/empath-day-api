@@ -55,7 +55,7 @@ public class ScheduleControllerTest {
             .scheduleDate(LocalDate.of(2023, 8, 28))
             .title("헬로")
             .content("내용")
-            .imageId(1L)
+            .imageId(0L)
             .emotion(Emotion.GOOD)
             .isPublic(true)
             .todos(List.of("hihi", "hello"))
@@ -63,7 +63,7 @@ public class ScheduleControllerTest {
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/schedule")
+                post("/api/v1/schedules")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )

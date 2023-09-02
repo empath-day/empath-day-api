@@ -93,5 +93,6 @@ public class Schedule extends AbstractEntity {
 
     public void addScheduleTodos(List<Todo> todos) {
         this.todos = todos;
+        todos.forEach(todo -> todo.addSchedule(this));
     }
 }

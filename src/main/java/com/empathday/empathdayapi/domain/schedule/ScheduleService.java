@@ -1,8 +1,10 @@
 package com.empathday.empathdayapi.domain.schedule;
 
 import static com.empathday.empathdayapi.common.response.ErrorCode.COMMON_ENTITY_NOT_FOUND;
+import static com.empathday.empathdayapi.common.response.ErrorCode.REQUIRED_EMOTION;
 
 import com.empathday.empathdayapi.common.exception.InvalidParamException;
+import com.empathday.empathdayapi.common.response.ErrorCode;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
@@ -53,6 +55,10 @@ public class ScheduleService {
      */
     @Transactional
     public Schedule createSchedule(RegisterScheduleRequest request) {
+        if (request.isEmotionBlank()) {
+            throw new InvalidParamException(REQUIRED_EMOTION);
+        }
+
         ScheduleImage scheduleImage = null;
         if (request.imageExists()) {
             scheduleImage = scheduleImageRepository.findById(request.getImageId()).orElseThrow(

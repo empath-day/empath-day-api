@@ -51,4 +51,8 @@ public class Todo extends AbstractEntity {
             .isCompleted(false)
             .build();
     }
+
+    public void addSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
 }

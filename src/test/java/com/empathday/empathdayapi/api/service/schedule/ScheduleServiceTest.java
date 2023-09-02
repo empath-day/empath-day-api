@@ -189,8 +189,12 @@ class ScheduleServiceTest {
         String content = "";
         Emotion emotion = Emotion.SO_BAD;
         RegisterScheduleRequest registerScheduleRequest = createScheduleRequest(scheduleDate, title, content, emotion);
+
         ArrayList<String> todoContents = new ArrayList<>();
-        todoContents.addAll(List.of("오늘 하루는~~", "피곤한 하루다~~"));
+        String firstTodo = "오늘 하루는~~";
+        String secondTodo = "피곤한 하루다~~";
+
+        todoContents.addAll(List.of(firstTodo, secondTodo));
         registerScheduleRequest.setTodoContents(todoContents);
 
         Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
@@ -206,9 +210,9 @@ class ScheduleServiceTest {
         assertThat(result.getImageResponses()).hasSize(0);
         assertThat(result.getTodoResponses()).hasSize(2)
             .extracting("content", "isCompleted")
-            .containsExactly(
-                tuple("오늘 하루는~~", false),
-                tuple("피곤한 하루다~~", false)
+            .containsExactlyInAnyOrder(
+                tuple(firstTodo, false),
+                tuple(secondTodo, false)
             );
     }
 

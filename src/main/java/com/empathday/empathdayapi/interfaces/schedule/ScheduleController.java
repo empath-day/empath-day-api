@@ -23,7 +23,7 @@ public class ScheduleController {
 
     @PostMapping("/api/v1/schedules")
     public CommonResponse<String> createSchedule(
-        @Valid @RequestBody RegisterScheduleRequest request
+        @RequestBody RegisterScheduleRequest request
     ) {
         scheduleService.createSchedule(request);
 

@@ -1,5 +1,6 @@
 package com.empathday.empathdayapi.domain.schedule.emotion;
 
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,4 +16,11 @@ public enum Emotion {
     ;
 
     private final String emotionImageUrl;
+
+    public static Emotion isAvailable(Emotion emotion) {
+        return Arrays.stream(Emotion.values())
+            .filter(e -> e == emotion)
+            .findAny()
+            .orElse(null);
+    }
 }
