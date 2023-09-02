@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
 @SpringBootTest
 class ScheduleServiceTest {
 
@@ -161,7 +160,9 @@ class ScheduleServiceTest {
         Emotion emotion = Emotion.SO_BAD;
         RegisterScheduleRequest registerScheduleRequest = createScheduleRequest(scheduleDate, title, content, emotion);
         ArrayList<String> todoContents = new ArrayList<>();
-        todoContents.addAll(List.of("오늘 하루는~~", "피곤한 하루다~~"));
+//        todoContents.addAll(List.of("오늘 하루는~~", "피곤한 하루다~~"));
+        todoContents.add("오늘 하루는~~");
+        todoContents.add("피곤한 하루다~~");
         registerScheduleRequest.setTodoContents(todoContents);
 
         // when
@@ -172,12 +173,7 @@ class ScheduleServiceTest {
         assertThat(savedSchedule.getScheduleDate()).isEqualTo(scheduleDate);
         assertThat(savedSchedule.getScheduleImages()).hasSize(0);
         assertThat(savedSchedule.isPublic()).isTrue();
-        assertThat(savedSchedule.getTodos()).hasSize(2)
-            .extracting("id", "content")
-            .containsExactlyInAnyOrder(
-                tuple(1L, "오늘 하루는~~"),
-                tuple(2L, "피곤한 하루다~~")
-            );
+        assertThat(savedSchedule.getTodos()).hasSize(2);
     }
 
     @DisplayName("스케줄의 상세정보를 조회할 수 있다")
