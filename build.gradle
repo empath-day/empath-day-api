@@ -49,19 +49,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-springBoot {
-    mainClass = 'com.empathday.YourApplication'
-}
-
-bootJar {
-    mainClassName = 'com.empathday.YourApplication'
-    sourceSets {
-        main {
-            resources {
-                srcDirs = ['src/main/resources', 'src/main/resources/']
-                // 다른 환경에 따른 설정 파일도 여기에 추가
-            }
-        }
-    }
-}
