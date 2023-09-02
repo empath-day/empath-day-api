@@ -1,7 +1,6 @@
 package com.empathday.empathdayapi.interfaces.file;
 
-import static com.amazonaws.HttpMethod.PUT;
-
+import com.empathday.empathdayapi.config.AWSS3Config;
 import com.empathday.empathdayapi.domain.file.FileUploadService;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import java.util.HashMap;
@@ -19,12 +18,13 @@ public class FileUploadController {
 
     private final FileUploadService fileUploadService;
     private final ScheduleService scheduleService;
+    private final AWSS3Config awss3Config;
 
     @GetMapping("/api/file/v1/presigned-url")
     public ResponseEntity<HashMap<String, Object>> generatePresignedUrl(
         @RequestParam("filename") String filename
     ) {
-        String presignedUrl = fileUploadService.generatePreSignedUrl(filename, PUT);
+        String presignedUrl = fileUploadService.generatePreSignedUrl(awss3Config.s3Presigner(), filename);
 
         Long imageId = scheduleService.createScheduleImage(filename);
 

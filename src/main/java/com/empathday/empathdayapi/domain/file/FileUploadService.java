@@ -1,30 +1,42 @@
 package com.empathday.empathdayapi.domain.file;
 
-import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.AmazonS3;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 @Service
 @RequiredArgsConstructor
 public class FileUploadService {
 
-    private final AmazonS3 amazonS3;
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     public String generatePreSignedUrl(
-        String filePath,
-        HttpMethod httpMethod
+        S3Presigner presigner,
+        String filename
     ) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, 10);
+        PresignedPutObjectRequest presignedRequest = presigner.presignPutObject(createPresignedUrlRequset(filename));
 
-        return amazonS3.generatePresignedUrl(bucket, filePath, calendar.getTime(), httpMethod).toString();
+        return presignedRequest.url().toString();
+    }
+
+    private PutObjectPresignRequest createPresignedUrlRequset(String filename) {
+        return PutObjectPresignRequest.builder()
+            .signatureDuration(Duration.ofMinutes(10))
+            .putObjectRequest(createPresignedRequest(filename))
+            .build();
+    }
+
+    private PutObjectRequest createPresignedRequest(String filename) {
+        return PutObjectRequest.builder()
+            .bucket(bucket)
+            .key(filename)
+            .contentType("test/plain")
+            .build();
     }
 }
