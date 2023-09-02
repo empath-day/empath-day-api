@@ -2,7 +2,8 @@ spring:
   profiles:
     active : local
     include:
-      - dev
+      - aws
+      - oauth
 ---
 spring:
   config:

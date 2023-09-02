@@ -29,12 +29,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Copy secret
+      - name: Copy dev secret
         env:
-          OCCUPY_SECRET: ${{ secrets.DEV_SECRET }}
-          OCCUPY_SECRET_DIR: src/main/resources
-          OCCUPY_SECRET_DIR_FILE_NAME: application-dev.yml
-        run: echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_DIR/$OCCUPY_SECRET_DIR_FILE_NAME
+          DEV_SECRET: ${{ secrets.DEV_SECRET }}
+          DEV_SECRET_DIR: src/main/resources
+          DEV_SECRET_DIR_FILE_NAME: application-dev.yml
+        run: echo $DEV_SECRET | base64 --decode > $DEV_SECRET_DIR/$DEV_SECRET_DIR_FILE_NAME
+
+      - name: Copy aws secret
+        env:
+          AWS_SECRET: ${{ secrets.AWS_SECRET }}
+          AWS_SECRET_DIR: src/main/resources
+          AWS_SECRET_DIR_FILE_NAME: application-aws.yml
+        run: echo $AWS_SECRET | base64 --decode > $AWS_SECRET_DIR/$AWS_SECRET_DIR_FILE_NAME
+
+      - name: Copy oauth secret
+        env:
+          OAUTH_SECRET: ${{ secrets.OAUTH_SECRET }}
+          OAUTH_SECRET_DIR: src/main/resources
+          OAUTH_SECRET_DIR_FILE_NAME: application-oauth.yml
+        run: echo $OAUTH_SECRET | base64 --decode > $OAUTH_SECRET_DIR/$OAUTH_SECRET_DIR_FILE_NAME
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
