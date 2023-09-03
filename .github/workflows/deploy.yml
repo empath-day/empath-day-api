@@ -103,43 +103,10 @@ jobs:
 
       # 원격 서보 배포 결과 알림
       - name: Notification
-        if: ${{ github.event.inputs.isRequiredRemoteDeploy }} == 'true'
         uses: 8398a7/action-slack@v3
         with:
-          status: custom
-          author_name: Github Action Notification
-          custom_payload: |
-            {
-              "attachments": [{
-                  color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                  "blocks": [
-                    {
-                      "type": "header",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Remote Deploy :computer:",
-                        "emoji": true
-                      }
-                    },
-                    {
-                      "type": "section",
-                      "fields": [
-                        {
-                          "type": "mrkdwn",
-                          "text": "*Host*\n${{ secrets.REMOTE_HOST }}"
-                        },
-                        {
-                          "type": "mrkdwn",
-                          "text": "*Registry*\n${{ env.REGISTRY_URL }}"
-                        },
-                        {
-                          "type": "mrkdwn",
-                          "text": "*Tag*\n${{ github.run_number }}"
-                        }
-                      ]
-                    }
-                  ]
-              }]
-            }
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CICD }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is cance
