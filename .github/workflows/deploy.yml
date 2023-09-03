@@ -100,3 +100,46 @@ jobs:
 
       - name: Code Deploy
         run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip --region ap-northeast-2
+
+      # 원격 서보 배포 결과 알림
+      - name: Notification
+        if: ${{ github.event.inputs.isRequiredRemoteDeploy }} == 'true'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          author_name: Github Action Notification
+          custom_payload: |
+            {
+              "attachments": [{
+                  color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Remote Deploy :computer:",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Host*\n${{ secrets.REMOTE_HOST }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Registry*\n${{ env.REGISTRY_URL }}"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Tag*\n${{ github.run_number }}"
+                        }
+                      ]
+                    }
+                  ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CICD }}
