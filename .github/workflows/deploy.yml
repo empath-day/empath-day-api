@@ -12,7 +12,7 @@ env:
   DEPLOYMENT_GROUP_NAME: CICDapp_deploy
 
 jobs:
-  build:
+  ci_cd:
     runs-on: ubuntu-latest
 
     steps:
