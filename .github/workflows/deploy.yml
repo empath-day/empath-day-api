@@ -5,11 +5,11 @@ on:
     branches:
       - develop
 
-  env:
-    PROJECT_NAME: empathy-day
-    BUCKET_NAME: empathy-day-cicd-bucket
-    CODE_DEPLOY_APP_NAME: CICDApp
-    DEPLOYMENT_GROUP_NAME: CICDapp_deploy
+env:
+  PROJECT_NAME: empathy-day
+  BUCKET_NAME: empathy-day-cicd-bucket
+  CODE_DEPLOY_APP_NAME: CICDApp
+  DEPLOYMENT_GROUP_NAME: CICDapp_deploy
 
 jobs:
   build:
