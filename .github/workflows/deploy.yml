@@ -5,6 +5,12 @@ on:
     branches:
       - develop
 
+  env:
+    PROJECT_NAME: empathy-day
+    BUCKET_NAME: empathy-day-cicd-bucket
+    CODE_DEPLOY_APP_NAME: CICDApp
+    DEPLOYMENT_GROUP_NAME: CICDapp_deploy
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -77,3 +83,20 @@ jobs:
         with:
           name: report_files
           path: report_files_*.tar.gz
+
+      - name: Make Zip File
+        run: zip -qq -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      - name: Configure CodeDeploy credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ CODE_DEPLOY_ACCESS_KEY_ID }}
+          aws-secret-access-key-id: ${{ CODE_DEPLOY_SECRET_KEY_ID }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip S3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
