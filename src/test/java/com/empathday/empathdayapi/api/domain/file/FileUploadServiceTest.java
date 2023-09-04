@@ -37,10 +37,6 @@ class FileUploadServiceTest {
 
         assertThat(preSignedUrl).isNotBlank();
         assertThat(uri.getHost()).isEqualTo("empathy-day-img-bucket.s3.ap-northeast-2.amazonaws.com");
-        for (String s : uri.getPath().split("/")) {
-            System.out.println("s = " + s);
-        }
-//        assertThat(uri.getPath().split("/")[0]).isEqualTo(filename);
     }
 
     @DisplayName("s3 bean 값들을 검증합니다.")
