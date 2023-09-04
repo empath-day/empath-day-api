@@ -44,6 +44,9 @@ dependencies {
     implementation 'software.amazon.awssdk:s3'
 
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
+
 }
 
 tasks.named('test') {
