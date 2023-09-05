@@ -57,4 +57,15 @@ public class ScheduleController {
     ) {
         return success(scheduleService.retrieveOneWeekScheduleInfo(userId));
     }
+
+    @Operation(
+        summary = "한달 스케줄 조회",
+        description = "한달 단위의 스케줄 정보를 조회할 수 있습니다."
+    )
+    @GetMapping("/api/v1/schedules/month/{userId}")
+    public CommonResponse retrieveMonthScheduleDetail(
+        @PathVariable("userId") Long userId
+    ) {
+        return success(scheduleService.retrieveOneMonthScheduleInfo(userId));
+    }
 }

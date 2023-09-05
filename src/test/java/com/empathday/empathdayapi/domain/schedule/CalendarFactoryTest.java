@@ -47,9 +47,25 @@ class CalendarFactoryTest {
         LocalDate currentDate = LocalDate.of(2023, 9, 1);
 
         // when
-        List<DefaultCalendarInfo> result = CalendarFactory.createOneMonthCalendar(currentDate);
+        List<RetrieveScheduleMainResponse> oneMonthCalendar = CalendarFactory.createOneMonthCalendar(currentDate);
+        List<DefaultCalendarInfo> result = oneMonthCalendar.stream()
+            .map(RetrieveScheduleMainResponse::getCalendarInfo)
+            .collect(Collectors.toList());
 
         // then
         assertThat(result).hasSize(31);
+    }
+
+    @DisplayName("9월의 마지막 날짜를 구합니다.")
+    @Test
+    void getLastDateOfMonth() {
+        // given
+        LocalDate now = LocalDate.of(2023, 9, 5);
+
+        // when
+        LocalDate lastDateOfMonth = CalendarFactory.getLastDateOfMonth(now);
+
+        // then
+        assertThat(lastDateOfMonth).isEqualTo(LocalDate.of(2023, 9, 30));
     }
 }

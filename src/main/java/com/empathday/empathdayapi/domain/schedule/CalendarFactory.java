@@ -42,24 +42,25 @@ public class CalendarFactory {
         return currentDate.minusDays(currentDate.getDayOfWeek().getValue() - MONDAY.getValue());
     }
 
-    public static List<DefaultCalendarInfo> createOneMonthCalendar(LocalDate currentDate) {
-        LocalDate firstDay = getFirstDay(currentDate);
+    public static List<RetrieveScheduleMainResponse> createOneMonthCalendar(LocalDate currentDate) {
+        LocalDate firstDay = getFirstDateOfMonth(currentDate);
 
-        List<DefaultCalendarInfo> defaultData = new ArrayList<>();
+        List<RetrieveScheduleMainResponse> defaultData = new ArrayList<>();
         for (int i = 0; i < firstDay.lengthOfMonth(); i++) {
-            defaultData.add(DefaultCalendarInfo.create(currentDate, currentDate.getDayOfWeek()));
+            defaultData.add(
+                RetrieveScheduleMainResponse.of(new RetrieveScheduleResponse(), DefaultCalendarInfo.create(currentDate, currentDate.getDayOfWeek()))
+            );
         }
 
         return defaultData;
     }
 
-    private static LocalDate getLastDay(LocalDate firstDay) {
-        return firstDay.withDayOfMonth(firstDay.lengthOfMonth());
+    public static LocalDate getFirstDateOfMonth(LocalDate currentDate) {
+        return currentDate.minusMonths(1);
     }
 
-    private static LocalDate getFirstDay(LocalDate currentDate) {
-        LocalDate firstDay = currentDate.minusMonths(1);
-        return firstDay;
+    public static LocalDate getLastDateOfMonth(LocalDate currentDate) {
+        return currentDate.withDayOfMonth(currentDate.lengthOfMonth());
     }
 
     /**
@@ -74,11 +75,7 @@ public class CalendarFactory {
 
         Map<LocalDate, RetrieveScheduleMainResponse> map = getDateMap(oneWeekCalendar);
 
-        List<Schedule> isNotNullSchedule = findSchedule.stream()
-            .filter(schedule -> Objects.nonNull(schedule))
-            .collect(Collectors.toList());
-
-        for (Schedule notNullSchedule : isNotNullSchedule) {
+        for (Schedule notNullSchedule : filterHavingSchedule(findSchedule)) {
             RetrieveScheduleMainResponse mainResponse = map.get(notNullSchedule.getScheduleDate());
 
             mainResponse.mappingSchedule(RetrieveScheduleResponse.fromEntity(notNullSchedule));
@@ -89,8 +86,38 @@ public class CalendarFactory {
         return map.values().stream().collect(Collectors.toList());
     }
 
+    private static List<Schedule> filterHavingSchedule(List<Schedule> findSchedule) {
+        List<Schedule> isNotNullSchedule = findSchedule.stream()
+            .filter(schedule -> Objects.nonNull(schedule))
+            .collect(Collectors.toList());
+        return isNotNullSchedule;
+    }
+
     private static Map<LocalDate, RetrieveScheduleMainResponse> getDateMap(List<RetrieveScheduleMainResponse> oneWeekCalendar) {
         return oneWeekCalendar.stream()
             .collect(Collectors.toMap(calendar -> calendar.getCalendarInfo().getDate(), c -> c));
+    }
+
+    /**
+     * 사용자의 1달치 스케줄 정보를 생성해서 반환합니다.
+     *
+     * @param currentDate
+     * @param findSchedule
+     * @return
+     */
+    public static List<RetrieveScheduleMainResponse> createOneMonthCalendarForUser(LocalDate currentDate, List<Schedule> findSchedule) {
+        List<RetrieveScheduleMainResponse> oneMonthCalendar = createOneMonthCalendar(currentDate);
+
+        Map<LocalDate, RetrieveScheduleMainResponse> map = getDateMap(oneMonthCalendar);
+
+        for (Schedule notNullSchedule : filterHavingSchedule(findSchedule)) {
+            RetrieveScheduleMainResponse mainResponse = map.get(notNullSchedule.getScheduleDate());
+
+            mainResponse.mappingSchedule(RetrieveScheduleResponse.fromEntity(notNullSchedule));
+
+            map.put(notNullSchedule.getScheduleDate(), mainResponse);
+        }
+
+        return map.values().stream().collect(Collectors.toList());
     }
 }

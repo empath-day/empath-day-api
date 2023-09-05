@@ -102,9 +102,24 @@ public class ScheduleService {
         LocalDate monday = currentDate.with(DayOfWeek.MONDAY);
         LocalDate sunday = currentDate.with(DayOfWeek.SUNDAY);
 
-        List<Schedule> findSchedule = scheduleRepository.findAllByUserIdAndScheduleDateBetween(userId, monday, sunday)
-            .orElseThrow(() -> new InvalidParamException(COMMON_ENTITY_NOT_FOUND));
+        List<Schedule> findSchedule = scheduleRepository.findAllByUserIdAndScheduleDateBetween(userId, monday, sunday);
 
         return CalendarFactory.createOneWeekCalendarForUser(currentDate, findSchedule);
+    }
+
+    /**
+     * 사용자의 1달치 스케줄 정보를 조회합니다.
+     *
+     * @return
+     */
+    public List<RetrieveScheduleMainResponse> retrieveOneMonthScheduleInfo(Long userId) {
+        LocalDate currentDate = LocalDate.now();
+
+        LocalDate monthStart = CalendarFactory.getFirstDateOfMonth(currentDate);
+        LocalDate monthLast = CalendarFactory.getLastDateOfMonth(currentDate);
+
+        List<Schedule> findSchedule = scheduleRepository.findAllByUserIdAndScheduleDateBetween(userId, monthStart, monthLast);
+
+        return CalendarFactory.createOneMonthCalendarForUser(currentDate, findSchedule);
     }
 }
