@@ -3,6 +3,7 @@ package com.empathday.empathdayapi.api.service.schedule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+import com.empathday.empathdayapi.common.utils.NumberUtils;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
@@ -12,10 +13,13 @@ import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepositor
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.todo.TodoRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleResponse;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -210,6 +214,36 @@ class ScheduleServiceTest {
                 tuple(firstTodo, false),
                 tuple(secondTodo, false)
             );
+    }
+
+    @DisplayName("회원의 1주일 스케줄 정보를 조회합니다.")
+    @Test
+    void createOneWeekCalendarForUser() {
+        // given
+        LocalDate now = LocalDate.of(2023, 9, 5);
+        LocalDate monday = LocalDate.of(2023, 9, 4);
+        LocalDate thuesday = LocalDate.of(2023, 9, 5);
+        LocalDate wednesday = LocalDate.of(2023, 9, 6);
+        LocalDate sunday = now.with(DayOfWeek.SUNDAY);
+
+        RegisterScheduleRequest monReq = createScheduleRequest(monday, "월요일", "월요일 스케줄", Emotion.SO_BAD);
+        RegisterScheduleRequest thuReq = createScheduleRequest(thuesday, "화요일", "화요일 스케줄", Emotion.BAD);
+        RegisterScheduleRequest wedReq = createScheduleRequest(wednesday, "수요일", "수요일 스케줄", Emotion.GOOD);
+
+        scheduleService.createSchedule(monReq);
+        scheduleService.createSchedule(thuReq);
+        scheduleService.createSchedule(wedReq);
+
+        // when
+        List<RetrieveScheduleMainResponse> result = scheduleService.retrieveOneWeekScheduleInfo(1L);
+
+        // then
+        List<RetrieveScheduleMainResponse> filtered = result.stream()
+            .filter(response -> NumberUtils.isNotNullOrZero(response.getScheduleResponse().getId()))
+            .collect(Collectors.toList());
+
+        assertThat(result).hasSize(7);
+        assertThat(filtered).hasSize(3);
     }
 
     private static RegisterScheduleRequest createScheduleRequest(LocalDate scheduleDate, String title, String content, Emotion emotion) {

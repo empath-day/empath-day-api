@@ -4,20 +4,17 @@ import static com.empathday.empathdayapi.common.response.ErrorCode.COMMON_ENTITY
 import static com.empathday.empathdayapi.common.response.ErrorCode.REQUIRED_EMOTION;
 
 import com.empathday.empathdayapi.common.exception.InvalidParamException;
-import com.empathday.empathdayapi.common.response.ErrorCode;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
-import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.DefaultCalendarInfo;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleResponse;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,26 +92,19 @@ public class ScheduleService {
     }
 
     /**
-     * 1주일치 스케줄 정보를 조회합니다.
+     * 사용자의 1주일치 스케줄 정보를 조회합니다.
      *
      * @return
      */
-    public RetrieveScheduleMainResponse retrieveOneWeekScheduleInfo(Long userId) {
+    public List<RetrieveScheduleMainResponse> retrieveOneWeekScheduleInfo(Long userId) {
         LocalDate currentDate = LocalDate.now();
 
-        List<DefaultCalendarInfo> oneWeekCalendar = CalendarFactory.createOneWeekCalendar(currentDate);
+        LocalDate monday = currentDate.with(DayOfWeek.MONDAY);
+        LocalDate sunday = currentDate.with(DayOfWeek.SUNDAY);
 
-        List<Schedule> findSchedule = scheduleRepository.findAllByScheduleDateBetween(currentDate, currentDate.plusDays(7)).orElseThrow(
-            () -> new InvalidParamException(COMMON_ENTITY_NOT_FOUND)
-        );
+        List<Schedule> findSchedule = scheduleRepository.findAllByUserIdAndScheduleDateBetween(userId, monday, sunday)
+            .orElseThrow(() -> new InvalidParamException(COMMON_ENTITY_NOT_FOUND));
 
-        Map<LocalDate, DefaultCalendarInfo> map = oneWeekCalendar.stream()
-            .collect(Collectors.toMap(calendar -> calendar.getDate(), c -> c));
-
-        List<Schedule> collect = findSchedule.stream()
-            .filter(schedule -> Objects.nonNull(schedule))
-            .collect(Collectors.toList());
-
-        return null;
+        return CalendarFactory.createOneWeekCalendarForUser(currentDate, findSchedule);
     }
 }

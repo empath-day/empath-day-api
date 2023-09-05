@@ -7,17 +7,18 @@ import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 public class ScheduleDto {
@@ -51,22 +52,27 @@ public class ScheduleDto {
             );
         }
 
+        @JsonIgnore
         public boolean imageExists() {
             return NumberUtils.isNotNullOrZero(this.imageId);
         }
 
+        @JsonIgnore
         public boolean todoExists() {
             return !CollectionUtils.isEmpty(todos);
         }
 
+        @JsonIgnore
         public void setScheduleImageId(Long imageId) {
             this.imageId = imageId;
         }
 
+        @JsonIgnore
         public void setTodoContents(ArrayList<String> todoContents) {
             this.todos = todoContents;
         }
 
+        @JsonIgnore
         public boolean isEmotionBlank() {
             return Emotion.isAvailable(this.emotion) == null;
         }
@@ -81,6 +87,10 @@ public class ScheduleDto {
 
         private RetrieveScheduleResponse scheduleResponse;
         private DefaultCalendarInfo calendarInfo;
+
+        public void mappingSchedule(RetrieveScheduleResponse response) {
+            scheduleResponse.mappingFrom(response);
+        }
     }
 
     @Getter
@@ -124,8 +134,8 @@ public class ScheduleDto {
         private String emotionImageUrl;
         private boolean isPublic;
         private List<ScheduleImageResponse> imageResponses;
-
         private List<TodoResponse> todoResponses;
+
         public static RetrieveScheduleResponse fromEntity(Schedule schedule) {
             return RetrieveScheduleResponse.builder()
                 .id(schedule.getId())
@@ -135,11 +145,38 @@ public class ScheduleDto {
                 .emotion(schedule.getEmotion())
                 .emotionImageUrl(schedule.getEmotion().getEmotionImageUrl())
                 .isPublic(schedule.isPublic())
-                .imageResponses(ScheduleImageResponse.fromEntity(schedule.getScheduleImages()))
-                .todoResponses(TodoResponse.fromEntity(schedule.getTodos()))
+                .imageResponses(checkImageIsNull(schedule.getScheduleImages()))
+                .todoResponses(checkTodoIsNull(schedule.getTodos()))
                 .build();
         }
 
+        private static List<ScheduleImageResponse> checkImageIsNull(List<ScheduleImage> scheduleImages) {
+            if (CollectionUtils.isEmpty(scheduleImages)) {
+                return null;
+            }
+
+            return ScheduleImageResponse.fromEntity(scheduleImages);
+        }
+
+        private static List<TodoResponse> checkTodoIsNull(List<Todo> todos) {
+            if (CollectionUtils.isEmpty(todos)) {
+                return null;
+            }
+
+            return TodoResponse.fromEntity(todos);
+        }
+
+        public void mappingFrom(RetrieveScheduleResponse response) {
+            this.id = response.getId();
+            this.scheduleDate = response.getScheduleDate();
+            this.title = response.getTitle();
+            this.content = response.getContent();
+            this.emotion = response.getEmotion();
+            this.emotionImageUrl = response.getEmotion().getEmotionImageUrl();
+            this.isPublic = response.isPublic();
+            this.imageResponses = response.getImageResponses();
+            this.todoResponses = response.getTodoResponses();
+        }
     }
 
     @Getter
@@ -152,6 +189,7 @@ public class ScheduleDto {
         private String filename;
         public static List<ScheduleImageResponse> fromEntity(List<ScheduleImage> scheduleImages) {
             return scheduleImages.stream()
+                .filter(Objects::nonNull)
                 .map(image -> ScheduleImageResponse.of(image.getId(), image.getFilename()))
                 .collect(Collectors.toList());
         }

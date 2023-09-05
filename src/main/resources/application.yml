@@ -36,7 +36,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    open-in-view: false
+    open-in-view: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5Dialect
 
@@ -57,7 +57,7 @@ spring:
       ddl-auto: create
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5Dialect
-    open-in-view: false
+    open-in-view: true
 
   datasource:
     url: jdbc:mysql://localhost:3306/empath_day?autoReconnect=true

@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.DefaultCalendarInfo;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,10 +21,13 @@ class CalendarFactoryTest {
         LocalDate currentDate = LocalDate.of(2023, 9, 1);
 
         // when
-        List<DefaultCalendarInfo> result = CalendarFactory.createOneWeekCalendar(currentDate);
+        List<RetrieveScheduleMainResponse> result = CalendarFactory.createOneWeekCalendar(currentDate);
+        List<DefaultCalendarInfo> calendarInfos = result.stream()
+            .map(RetrieveScheduleMainResponse::getCalendarInfo)
+            .collect(Collectors.toList());
 
         // then
-        assertThat(result).hasSize(7)
+        assertThat(calendarInfos).hasSize(7)
             .extracting("date", "day")
             .containsExactly(
                 tuple(LocalDate.of(2023, 8, 28), DayOfWeek.MONDAY),
