@@ -36,13 +36,25 @@ public class ScheduleController {
     }
 
     @Operation(
-        summary = "스케줄 조회",
+        summary = "일일 스케줄 조회",
         description = "일일 단위의 스케줄 정보를 조회할 수 있습니다."
     )
-    @GetMapping("/api/v1/schedules/{id}")
+    @GetMapping("/api/v1/schedules/{id}/{userId}")
     public CommonResponse retrieveScheduleDetail(
-        @PathVariable("id") Long id
+        @PathVariable("id") Long id,
+        @PathVariable("userId") Long userId
     ) {
-        return success(scheduleService.retrieveScheduleDetail(id, 0L));
+        return success(scheduleService.retrieveScheduleDetail(id, userId));
+    }
+
+    @Operation(
+        summary = "일주일 스케줄 조회",
+        description = "일주일 단위의 스케줄 정보를 조회할 수 있습니다."
+    )
+    @GetMapping("/api/v1/schedules/week/{userId}")
+    public CommonResponse retrieveWeekScheduleDetail(
+        @PathVariable("userId") Long userId
+    ) {
+        return success(scheduleService.retrieveOneWeekScheduleInfo(userId));
     }
 }
