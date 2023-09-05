@@ -207,7 +207,7 @@ class ScheduleServiceTest {
         assertThat(result.getTitle()).isEqualTo(title);
         assertThat(result.getContent()).isEqualTo(content);
         assertThat(result.getEmotion()).isEqualTo(emotion);
-        assertThat(result.getImageResponses()).hasSize(0);
+        assertThat(result.getImageResponses()).isNull();
         assertThat(result.getTodoResponses()).hasSize(2)
             .extracting("content", "isCompleted")
             .containsExactlyInAnyOrder(
