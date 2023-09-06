@@ -5,7 +5,9 @@ import static com.empathday.empathdayapi.common.response.CommonResponse.success;
 import com.empathday.empathdayapi.common.response.CommonResponse;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +54,7 @@ public class ScheduleController {
         description = "일주일 단위의 스케줄 정보를 조회할 수 있습니다."
     )
     @GetMapping("/api/v1/schedules/week/{userId}")
-    public CommonResponse retrieveWeekScheduleDetail(
+    public CommonResponse<List<RetrieveScheduleMainResponse>> retrieveWeekScheduleDetail(
         @PathVariable("userId") Long userId
     ) {
         return success(scheduleService.retrieveOneWeekScheduleInfo(userId));
@@ -63,7 +65,7 @@ public class ScheduleController {
         description = "한달 단위의 스케줄 정보를 조회할 수 있습니다."
     )
     @GetMapping("/api/v1/schedules/month/{userId}")
-    public CommonResponse retrieveMonthScheduleDetail(
+    public CommonResponse<List<RetrieveScheduleMainResponse>> retrieveMonthScheduleDetail(
         @PathVariable("userId") Long userId
     ) {
         return success(scheduleService.retrieveOneMonthScheduleInfo(userId));
