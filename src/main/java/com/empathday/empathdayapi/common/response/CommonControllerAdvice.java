@@ -39,6 +39,13 @@ public class CommonControllerAdvice {
         return CommonResponse.fail(ErrorCode.COMMON_SYSTEM_ERROR);
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Object processValidationError(MethodArgumentNotValidException ex) {
+        return CommonResponse.fail(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage(), COMMON_INVALID_PARAMETER.name());
+    }
+
     /**
      * http status: 200 AND result: FAIL
      * 시스템은 이슈 없고, 비즈니스 로직 처리에서 에러가 발생함
@@ -50,16 +57,7 @@ public class CommonControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(value = BaseException.class)
     public CommonResponse onBaseException(BaseException e) {
-        if (ERROR_CODE_LIST.contains(e.getErrorCode())) {
-            log.error("[BaseException] cause = {}, errorMsg = {}", getMostSpecificCause(e), getMostSpecificCause(e).getMessage());
-        } else {
-            log.warn("[BaseException] cause = {}, errorMsg = {}", getMostSpecificCause(e), getMostSpecificCause(e).getMessage());
-        }
-        return CommonResponse.fail(e.getMessage(), e.getErrorCode().name());
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object processValidationError(MethodArgumentNotValidException ex) {
-        return CommonResponse.fail(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage(), COMMON_INVALID_PARAMETER.name());
+        log.error("[BaseException] cause = {}, errorMsg = {}", getMostSpecificCause(e), getMostSpecificCause(e).getMessage());
+        return CommonResponse.fail(e.getErrorCode().getErrorMsg(), e.getErrorCode().name());
     }
 }

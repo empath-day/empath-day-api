@@ -45,14 +45,6 @@ public class ScheduleLike {
             .build();
     }
 
-    public static ScheduleLike createUnLikeEntity(Long userId, Schedule schedule) {
-        return ScheduleLike.builder()
-            .userId(userId)
-            .schedule(schedule)
-            .likeStatus(LikeStatus.UN_LIKE)
-            .build();
-    }
-
     public void unLike() {
         this.likeStatus = LikeStatus.UN_LIKE;
     }

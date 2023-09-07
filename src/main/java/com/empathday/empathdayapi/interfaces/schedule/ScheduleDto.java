@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,11 +32,13 @@ public class ScheduleDto {
     @NoArgsConstructor
     public static class RegisterScheduleRequest {
 
+        @NotNull(message = "userId는 필수 정보입니다.")
         private Long userId;
         private LocalDate scheduleDate;
         private String title;
         private String content;
         private Long imageId;
+        @NotNull(message = "emotion 정보는 필수 정보입니다.")
         private Emotion emotion;
         private boolean isPublic;
         private List<String> todos;

@@ -41,8 +41,4 @@ public class ScheduleLikeService {
             () -> new FeedLikeNotFoundException()
         );
     }
-
-    private void saveUnLike(Long userId, Schedule schedule) {
-        scheduleLikeRepository.save(ScheduleLike.createUnLikeEntity(userId, schedule));
-    }
 }
