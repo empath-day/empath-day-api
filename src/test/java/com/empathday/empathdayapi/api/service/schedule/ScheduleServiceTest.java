@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import com.empathday.empathdayapi.common.utils.NumberUtils;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
-import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
+import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
@@ -25,7 +25,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 class ScheduleServiceTest {

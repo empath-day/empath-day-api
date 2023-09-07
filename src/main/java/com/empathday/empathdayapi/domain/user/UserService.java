@@ -1,5 +1,7 @@
 package com.empathday.empathdayapi.domain.user;
 
+import com.empathday.empathdayapi.common.response.ErrorCode;
+import com.empathday.empathdayapi.domain.user.exception.UserNotFoundException;
 import com.empathday.empathdayapi.infrastructure.user.UserRepository;
 import com.empathday.empathdayapi.interfaces.user.UserSignUpDto;
 import javax.transaction.Transactional;
@@ -33,6 +35,12 @@ public class UserService {
 
         user.passwordEncode(passwordEncoder);
         userRepository.save(user);
+    }
+
+    public User getUserInfo(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+            () -> new UserNotFoundException(ErrorCode.USER_ENTITY_NOT_FOUND)
+        );
     }
 }
 

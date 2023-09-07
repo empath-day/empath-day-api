@@ -3,7 +3,7 @@ package com.empathday.empathdayapi.domain.schedule;
 import static javax.persistence.EnumType.STRING;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
-import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
+import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "schedules")
-public class Schedule extends AbstractEntity {
+public class  Schedule extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

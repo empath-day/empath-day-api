@@ -1,18 +1,14 @@
-package com.empathday.empathdayapi.api.controller.schedule;
+package com.empathday.empathdayapi.interfaces.schedule;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.empathday.empathdayapi.domain.schedule.ScheduleService;
-import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
-import com.empathday.empathdayapi.interfaces.schedule.ScheduleController;
-import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.domain.feed.like.ScheduleLikeService;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleLikeDto.CommandScheduleLikeRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,15 +22,15 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @WebMvcTest(controllers = {
-    ScheduleController.class
+    ScheduleLikeController.class
 })
-public class ScheduleControllerTest {
+class ScheduleLikeControllerTest {
 
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private ScheduleService scheduleService;
+    private ScheduleLikeService scheduleLikeService;
 
     @BeforeEach
     void setUp(WebApplicationContext applicationContext) {
@@ -44,27 +40,45 @@ public class ScheduleControllerTest {
                 .build();
     }
 
-    @DisplayName("스케쥴을 등록한다.")
+    @DisplayName("스케줄 좋아요")
     @Test
-    void createSchedule() throws Exception {
+    void likeSchedule() throws Exception {
         // given
-        RegisterScheduleRequest request = RegisterScheduleRequest.builder()
-            .userId(1L)
-            .scheduleDate(LocalDate.of(2023, 8, 28))
-            .title("헬로")
-            .content("내용")
-            .imageId(0L)
-            .emotion(Emotion.GOOD)
-            .isPublic(true)
-            .todos(List.of("hihi", "hello"))
-            .build();
+        Long userId = 1L;
+        Long feedId = 1L;
+
+        CommandScheduleLikeRequest request = CommandScheduleLikeRequest.of(userId, feedId);
 
         // when // then
         mockMvc.perform(
-                post("/api/v1/schedules")
+                put("/api/v1/schedule/like")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result").value("SUCCESS"))
+            .andExpect(jsonPath("$.data").value("OK"))
+            .andExpect(jsonPath("$.message").doesNotExist())
+            .andExpect(jsonPath("$.errorCode").doesNotExist());
+    }
+
+    @DisplayName("스케줄 좋아요 취소")
+    @Test
+    void unLikeSchedule() throws Exception {
+        // given
+        Long userId = 1L;
+        Long feedId = 1L;
+
+        CommandScheduleLikeRequest request = CommandScheduleLikeRequest.of(userId, feedId);
+
+        // when // then
+        mockMvc.perform(
+                put("/api/v1/schedule/unlike")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result").value("SUCCESS"))
             .andExpect(jsonPath("$.data").value("OK"))

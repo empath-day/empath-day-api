@@ -4,7 +4,7 @@ import static java.util.Collections.EMPTY_LIST;
 
 import com.empathday.empathdayapi.common.utils.NumberUtils;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
-import com.empathday.empathdayapi.domain.schedule.emotion.Emotion;
+import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.fasterxml.jackson.annotation.JsonIgnore;

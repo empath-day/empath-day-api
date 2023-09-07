@@ -5,6 +5,7 @@ import static com.empathday.empathdayapi.common.response.CommonResponse.success;
 import com.empathday.empathdayapi.common.response.CommonResponse;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -42,7 +43,7 @@ public class ScheduleController {
         description = "일일 단위의 스케줄 정보를 조회할 수 있습니다."
     )
     @GetMapping("/api/v1/schedules/{id}/{userId}")
-    public CommonResponse retrieveScheduleDetail(
+    public CommonResponse<RetrieveScheduleDetailMainResponse> retrieveScheduleDetail(
         @PathVariable("id") Long id,
         @PathVariable("userId") Long userId
     ) {

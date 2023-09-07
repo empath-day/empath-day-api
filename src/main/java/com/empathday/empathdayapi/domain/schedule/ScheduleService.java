@@ -1,11 +1,11 @@
 package com.empathday.empathdayapi.domain.schedule;
 
-import static com.empathday.empathdayapi.common.response.ErrorCode.COMMON_ENTITY_NOT_FOUND;
 import static com.empathday.empathdayapi.common.response.ErrorCode.REQUIRED_EMOTION;
 
 import com.empathday.empathdayapi.common.exception.InvalidParamException;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
+import com.empathday.empathdayapi.exception.feed.FeedNotFoundException;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
@@ -84,11 +84,15 @@ public class ScheduleService {
      * @param id    스케줄 ID
      */
     public RetrieveScheduleDetailMainResponse retrieveScheduleDetail(Long id, Long userId) {
-        Schedule findSchedule = scheduleRepository.findByIdAndUserId(id, userId).orElseThrow(
-            () -> new InvalidParamException()
-        );
+        Schedule findSchedule = getScheduleByFeedIdAndUserId(id, userId);
 
         return RetrieveScheduleDetailMainResponse.of(RetrieveScheduleResponse.fromEntity(findSchedule));
+    }
+
+    private Schedule getScheduleByFeedIdAndUserId(Long id, Long userId) {
+        return scheduleRepository.findByIdAndUserId(id, userId).orElseThrow(
+            () -> new FeedNotFoundException()
+        );
     }
 
     /**
@@ -121,5 +125,11 @@ public class ScheduleService {
         List<Schedule> findSchedule = scheduleRepository.findAllByUserIdAndScheduleDateBetween(userId, monthStart, monthLast);
 
         return CalendarFactory.createOneMonthCalendarForUser(currentDate, findSchedule);
+    }
+
+    public Schedule getScheduleInfo(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(
+            () -> new FeedNotFoundException()
+        );
     }
 }
