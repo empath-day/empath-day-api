@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.domain.schedule.emotion;
+package com.empathday.empathdayapi.domain.emotion.emotion;
 
 import java.util.Arrays;
 import lombok.AllArgsConstructor;

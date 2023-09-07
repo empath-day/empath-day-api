@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.domain.schedule.emotion;
+package com.empathday.empathdayapi.domain.emotion.emotion;
 
 import static javax.persistence.EnumType.STRING;
 

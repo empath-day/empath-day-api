@@ -1,6 +1,6 @@
-package com.empathday.empathdayapi.domain.schedule.emotion;
+package com.empathday.empathdayapi.domain.emotion.emotion;
 
-import com.empathday.empathdayapi.infrastructure.schedule.EmotionRepository;
+import com.empathday.empathdayapi.infrastructure.schedule.emotion.EmotionRepository;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

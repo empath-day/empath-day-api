@@ -1,6 +1,6 @@
 package com.empathday.empathdayapi.interfaces.emotion;
 
-import com.empathday.empathdayapi.domain.schedule.emotion.EmotionEntity;
+import com.empathday.empathdayapi.domain.emotion.emotion.EmotionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

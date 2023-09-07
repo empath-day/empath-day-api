@@ -1,7 +1,7 @@
 package com.empathday.empathdayapi.domain.emotion;
 
-import com.empathday.empathdayapi.domain.schedule.emotion.EmotionEntity;
-import com.empathday.empathdayapi.infrastructure.schedule.EmotionRepository;
+import com.empathday.empathdayapi.domain.emotion.emotion.EmotionEntity;
+import com.empathday.empathdayapi.infrastructure.schedule.emotion.EmotionRepository;
 import com.empathday.empathdayapi.interfaces.emotion.EmotionDto.EmotionRetrieveResponse;
 import java.util.List;
 import java.util.stream.Collectors;
