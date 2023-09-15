@@ -30,4 +30,25 @@ public class ScheduleCommentDto {
             return NumberUtils.isNotNullOrZero(commentParentId);
         }
     }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class RetrieveScheduleCommentRequest {
+
+    }
+
+    /** response **/
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class RetrieveScheduleCommentResponse {
+
+        private Long scheduleId;
+        private Long commentId;
+        private Long parentId;
+        private String content;
+        private Long writerId;
+        private String writerProfileImageUrl;
+    }
 }

@@ -8,6 +8,7 @@ import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterSchedu
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class ScheduleController {
     public CommonResponse<List<RetrieveScheduleMainResponse>> retrieveWeekScheduleDetail(
         @PathVariable("userId") Long userId
     ) {
-        return success(scheduleService.retrieveOneWeekScheduleInfo(userId));
+        return success(scheduleService.retrieveOneWeekScheduleInfo(userId, LocalDate.now()));
     }
 
     @Operation(

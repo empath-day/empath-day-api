@@ -234,7 +234,7 @@ class ScheduleServiceTest {
         scheduleService.registerSchedule(wedReq);
 
         // when
-        List<RetrieveScheduleMainResponse> result = scheduleService.retrieveOneWeekScheduleInfo(1L);
+        List<RetrieveScheduleMainResponse> result = scheduleService.retrieveOneWeekScheduleInfo(1L, thuesday);
 
         // then
         List<RetrieveScheduleMainResponse> filtered = result.stream()

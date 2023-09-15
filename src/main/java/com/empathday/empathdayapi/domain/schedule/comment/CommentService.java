@@ -6,7 +6,9 @@ import com.empathday.empathdayapi.domain.user.User;
 import com.empathday.empathdayapi.domain.user.UserService;
 import com.empathday.empathdayapi.exception.schedule.CommentNotFoundException;
 import com.empathday.empathdayapi.infrastructure.schedule.comment.CommentRepository;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleCommentDto;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleCommentDto.RegisterScheduleCommentRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleCommentDto.RetrieveScheduleCommentResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,5 +59,9 @@ public class CommentService {
         return commentRepository.findByScheduleIdAndAndUserId(scheduleId, userId).orElseThrow(
             () -> new CommentNotFoundException()
         );
+    }
+
+    public List<RetrieveScheduleCommentResponse> retrieveCommentDetail() {
+        return null;
     }
 }

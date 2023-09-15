@@ -100,9 +100,7 @@ public class ScheduleService {
      *
      * @return
      */
-    public List<RetrieveScheduleMainResponse> retrieveOneWeekScheduleInfo(Long userId) {
-        LocalDate currentDate = LocalDate.now();
-
+    public List<RetrieveScheduleMainResponse> retrieveOneWeekScheduleInfo(Long userId, LocalDate currentDate) {
         LocalDate monday = currentDate.with(DayOfWeek.MONDAY);
         LocalDate sunday = currentDate.with(DayOfWeek.SUNDAY);
 
