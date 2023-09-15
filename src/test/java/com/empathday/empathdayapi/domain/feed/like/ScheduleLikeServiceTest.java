@@ -4,9 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
-import com.empathday.empathdayapi.domain.feed.like.ScheduleLike.LikeStatus;
+import com.empathday.empathdayapi.domain.schedule.like.ScheduleLike.LikeStatus;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
+import com.empathday.empathdayapi.domain.schedule.like.ScheduleLikeService;
 import com.empathday.empathdayapi.infrastructure.schedule.feed.ScheduleLikeRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
 import java.time.LocalDate;
@@ -42,7 +43,7 @@ class ScheduleLikeServiceTest {
         Emotion emotion = Emotion.SO_BAD;
         RegisterScheduleRequest request = createScheduleRequest(scheduleDate, title, content, emotion);
 
-        Schedule savedSchedule = scheduleService.createSchedule(request);
+        Schedule savedSchedule = scheduleService.registerSchedule(request);
 
         // when
         scheduleLikeService.likeSchedule(savedSchedule.getId(), userId);
@@ -66,7 +67,7 @@ class ScheduleLikeServiceTest {
         Emotion emotion = Emotion.SO_BAD;
         RegisterScheduleRequest request = createScheduleRequest(scheduleDate, title, content, emotion);
 
-        Schedule savedSchedule = scheduleService.createSchedule(request);
+        Schedule savedSchedule = scheduleService.registerSchedule(request);
         scheduleLikeService.likeSchedule(savedSchedule.getId(), userId);
 
         // when

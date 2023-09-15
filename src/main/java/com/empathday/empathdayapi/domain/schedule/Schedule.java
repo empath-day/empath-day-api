@@ -4,6 +4,7 @@ import static javax.persistence.EnumType.STRING;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
+import com.empathday.empathdayapi.domain.schedule.comment.Comment;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import java.time.LocalDate;
@@ -48,10 +49,14 @@ public class  Schedule extends AbstractEntity {
     @Enumerated(STRING)
     private Emotion emotion;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST)
+    private List<Comment> comments = new ArrayList<>();
+
     private Long userId;
 
     @Builder.Default
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST)
     private List<ScheduleImage> scheduleImages = new ArrayList<>();
 
     @Builder.Default

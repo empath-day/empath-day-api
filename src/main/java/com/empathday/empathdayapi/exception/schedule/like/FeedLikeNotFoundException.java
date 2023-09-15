@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.exception.feed.like;
+package com.empathday.empathdayapi.exception.schedule.like;
 
 import com.empathday.empathdayapi.common.exception.BaseException;
 import com.empathday.empathdayapi.common.response.ErrorCode;

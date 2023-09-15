@@ -1,8 +1,8 @@
-package com.empathday.empathdayapi.domain.feed.like;
+package com.empathday.empathdayapi.domain.schedule.like;
 
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
-import com.empathday.empathdayapi.exception.feed.like.FeedLikeNotFoundException;
+import com.empathday.empathdayapi.exception.schedule.like.FeedLikeNotFoundException;
 import com.empathday.empathdayapi.infrastructure.schedule.feed.ScheduleLikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

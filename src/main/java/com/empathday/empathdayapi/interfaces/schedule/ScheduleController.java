@@ -33,7 +33,7 @@ public class ScheduleController {
     public CommonResponse<String> createSchedule(
         @Valid @RequestBody RegisterScheduleRequest request
     ) {
-        scheduleService.createSchedule(request);
+        scheduleService.registerSchedule(request);
 
         return success("OK");
     }

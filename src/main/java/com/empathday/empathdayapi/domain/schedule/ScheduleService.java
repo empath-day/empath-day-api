@@ -5,7 +5,7 @@ import static com.empathday.empathdayapi.common.response.ErrorCode.REQUIRED_EMOT
 import com.empathday.empathdayapi.common.exception.InvalidParamException;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
-import com.empathday.empathdayapi.exception.feed.FeedNotFoundException;
+import com.empathday.empathdayapi.exception.schedule.ScheduleNotFoundException;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
@@ -51,7 +51,7 @@ public class ScheduleService {
      * @return
      */
     @Transactional
-    public Schedule createSchedule(RegisterScheduleRequest request) {
+    public Schedule registerSchedule(RegisterScheduleRequest request) {
         if (request.isEmotionBlank()) {
             throw new InvalidParamException(REQUIRED_EMOTION);
         }
@@ -91,7 +91,7 @@ public class ScheduleService {
 
     private Schedule getScheduleByFeedIdAndUserId(Long id, Long userId) {
         return scheduleRepository.findByIdAndUserId(id, userId).orElseThrow(
-            () -> new FeedNotFoundException()
+            () -> new ScheduleNotFoundException()
         );
     }
 
@@ -129,7 +129,7 @@ public class ScheduleService {
 
     public Schedule getScheduleInfo(Long scheduleId) {
         return scheduleRepository.findById(scheduleId).orElseThrow(
-            () -> new FeedNotFoundException()
+            () -> new ScheduleNotFoundException()
         );
     }
 }

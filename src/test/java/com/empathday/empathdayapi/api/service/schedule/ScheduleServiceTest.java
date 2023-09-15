@@ -118,7 +118,7 @@ class ScheduleServiceTest {
         RegisterScheduleRequest registerScheduleRequest = createScheduleRequest(scheduleDate, title, content, emotion);
 
         // when
-        Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
+        Schedule savedSchedule = scheduleService.registerSchedule(registerScheduleRequest);
 
         // then
         assertThat(savedSchedule.getId()).isNotNull();
@@ -143,7 +143,7 @@ class ScheduleServiceTest {
         registerScheduleRequest.setScheduleImageId(scheduleImage.getId());
 
         // when
-        Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
+        Schedule savedSchedule = scheduleService.registerSchedule(registerScheduleRequest);
 
         // then
         assertThat(savedSchedule.getId()).isNotNull();
@@ -169,7 +169,7 @@ class ScheduleServiceTest {
         registerScheduleRequest.setTodoContents(todoContents);
 
         // when
-        Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
+        Schedule savedSchedule = scheduleService.registerSchedule(registerScheduleRequest);
 
         // then
         assertThat(savedSchedule.getId()).isNotNull();
@@ -196,7 +196,7 @@ class ScheduleServiceTest {
         todoContents.addAll(List.of(firstTodo, secondTodo));
         registerScheduleRequest.setTodoContents(todoContents);
 
-        Schedule savedSchedule = scheduleService.createSchedule(registerScheduleRequest);
+        Schedule savedSchedule = scheduleService.registerSchedule(registerScheduleRequest);
 
         // when
         RetrieveScheduleResponse result = scheduleService.retrieveScheduleDetail(savedSchedule.getId(), 1L).getScheduleResponse();
@@ -229,9 +229,9 @@ class ScheduleServiceTest {
         RegisterScheduleRequest thuReq = createScheduleRequest(thuesday, "화요일", "화요일 스케줄", Emotion.BAD);
         RegisterScheduleRequest wedReq = createScheduleRequest(wednesday, "수요일", "수요일 스케줄", Emotion.GOOD);
 
-        scheduleService.createSchedule(monReq);
-        scheduleService.createSchedule(thuReq);
-        scheduleService.createSchedule(wedReq);
+        scheduleService.registerSchedule(monReq);
+        scheduleService.registerSchedule(thuReq);
+        scheduleService.registerSchedule(wedReq);
 
         // when
         List<RetrieveScheduleMainResponse> result = scheduleService.retrieveOneWeekScheduleInfo(1L);

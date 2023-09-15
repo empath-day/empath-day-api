@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.empathday.empathdayapi.domain.feed.like.ScheduleLikeService;
+import com.empathday.empathdayapi.domain.schedule.like.ScheduleLikeService;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleLikeDto.CommandScheduleLikeRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;

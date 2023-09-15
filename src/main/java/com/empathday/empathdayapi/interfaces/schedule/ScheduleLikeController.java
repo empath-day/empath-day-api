@@ -1,7 +1,7 @@
 package com.empathday.empathdayapi.interfaces.schedule;
 
 import com.empathday.empathdayapi.common.response.CommonResponse;
-import com.empathday.empathdayapi.domain.feed.like.ScheduleLikeService;
+import com.empathday.empathdayapi.domain.schedule.like.ScheduleLikeService;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleLikeDto.CommandScheduleLikeRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

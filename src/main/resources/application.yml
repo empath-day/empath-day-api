@@ -4,7 +4,6 @@ spring:
     include:
       - aws
       - oauth2
-      - dev
 
 #p6spy query logging
 decorator:
@@ -35,7 +34,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5Dialect

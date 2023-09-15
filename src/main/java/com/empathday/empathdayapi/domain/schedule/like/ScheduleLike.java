@@ -1,7 +1,10 @@
-package com.empathday.empathdayapi.domain.feed.like;
+package com.empathday.empathdayapi.domain.schedule.like;
 
+import com.empathday.empathdayapi.domain.common.AbstractEntity;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Entity
 @Table(name = "schedule_likes")
-public class ScheduleLike {
+public class ScheduleLike extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +38,7 @@ public class ScheduleLike {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
+    @Enumerated(EnumType.STRING)
     private LikeStatus likeStatus;
 
     public static ScheduleLike createLikeEntity(Long userId, Schedule schedule) {

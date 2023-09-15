@@ -13,8 +13,9 @@ public enum ErrorCode {
     COMMON_ILLEGAL_STATUS("잘못된 상태값입니다."),
     REQUIRED_EMOTION("감정 상태는 필수값입니다."),
     USER_ENTITY_NOT_FOUND("존재하지 않는 회원입니다."),
-    FEED_ENTITY_NOT_FOUND("존재하지 않는 피드입니다."),
+    SCHEDULE_ENTITY_NOT_FOUND("존재하지 않는 피드입니다."),
     FEED_LIKE_ENTITY_NOT_FOUND("좋아요 정보가 존재하지 않습니다."),
+    COMMENT_ENTITY_NOT_FOUND("존재하지 않는 댓글입니다."),
     ;
 
     private final String errorMsg;
