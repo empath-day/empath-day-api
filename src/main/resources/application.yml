@@ -34,7 +34,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     open-in-view: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5Dialect

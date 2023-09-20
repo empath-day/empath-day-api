@@ -3,6 +3,7 @@ package com.empathday.empathdayapi.domain.schedule;
 import static javax.persistence.EnumType.STRING;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
+import com.empathday.empathdayapi.domain.common.DeleteStatus;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.comment.Comment;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +27,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
@@ -42,9 +43,8 @@ public class  Schedule extends AbstractEntity {
     private String title;
     private String content;
 
-    @ColumnDefault("false")
-    @Column(columnDefinition = "TINYINT(1)")
-    private boolean isPublic;
+    @Enumerated(EnumType.STRING)
+    private Scope scope;
 
     @Enumerated(STRING)
     private Emotion emotion;
@@ -63,10 +63,14 @@ public class  Schedule extends AbstractEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST)
     private List<Todo> todos = new ArrayList<>();
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DeleteStatus deleteStatus;
+
     /** 생성 메서드 **/
     public Schedule(
         Long userId, LocalDate scheduleDate, String title, String content,
-        List<ScheduleImage> scheduleImages, Emotion emotion, boolean isPublic
+        List<ScheduleImage> scheduleImages, Emotion emotion, Scope scope, DeleteStatus deleteStatus
     ) {
         this.userId = userId;
         this.scheduleDate = scheduleDate;
@@ -74,12 +78,13 @@ public class  Schedule extends AbstractEntity {
         this.content = content;
         this.scheduleImages = scheduleImages;
         this.emotion = emotion;
-        this.isPublic = isPublic;
+        this.scope = scope;
+        this.deleteStatus = deleteStatus;
     }
 
     public static Schedule of(
         Long userId, LocalDate scheduleDate, String title, String content,
-        List<ScheduleImage> scheduleImage, Emotion emotion, boolean isPublic
+        List<ScheduleImage> scheduleImage, Emotion emotion, Scope scope
     ) {
         return new Schedule(
             userId,
@@ -88,7 +93,8 @@ public class  Schedule extends AbstractEntity {
             StringUtils.isNotBlank(content) ? content : "",
             scheduleImage,
             emotion,
-            isPublic
+            scope,
+            DeleteStatus.N
         );
     }
 
@@ -99,5 +105,9 @@ public class  Schedule extends AbstractEntity {
     public void addScheduleTodos(List<Todo> todos) {
         this.todos = todos;
         todos.forEach(todo -> todo.addSchedule(this));
+    }
+
+    public enum Scope {
+        PUBLIC, PRIVATE;
     }
 }

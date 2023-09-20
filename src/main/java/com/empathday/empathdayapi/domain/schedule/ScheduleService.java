@@ -3,11 +3,13 @@ package com.empathday.empathdayapi.domain.schedule;
 import static com.empathday.empathdayapi.common.response.ErrorCode.REQUIRED_EMOTION;
 
 import com.empathday.empathdayapi.common.exception.InvalidParamException;
+import com.empathday.empathdayapi.domain.schedule.comment.CommentService;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
-import com.empathday.empathdayapi.exception.schedule.ScheduleNotFoundException;
+import com.empathday.empathdayapi.domain.exception.schedule.ScheduleNotFoundException;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
+import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RetrieveCommentResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ScheduleService {
 
+    private final CommentService commentService;
     private final ScheduleRepository scheduleRepository;
     private final ScheduleImageRepository scheduleImageRepository;
 
@@ -86,7 +89,9 @@ public class ScheduleService {
     public RetrieveScheduleDetailMainResponse retrieveScheduleDetail(Long id, Long userId) {
         Schedule findSchedule = getScheduleByFeedIdAndUserId(id, userId);
 
-        return RetrieveScheduleDetailMainResponse.of(RetrieveScheduleResponse.fromEntity(findSchedule));
+        List<RetrieveCommentResponse> commentResponses = commentService.findAllBySchedule(findSchedule);
+
+        return RetrieveScheduleDetailMainResponse.of(RetrieveScheduleResponse.fromEntity(findSchedule), commentResponses);
     }
 
     private Schedule getScheduleByFeedIdAndUserId(Long id, Long userId) {

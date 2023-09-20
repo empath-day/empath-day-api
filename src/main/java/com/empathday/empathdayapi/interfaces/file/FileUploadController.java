@@ -1,10 +1,10 @@
-package com.empathday.empathdayapi.api.controller.file;
+package com.empathday.empathdayapi.interfaces.file;
 
 import com.empathday.empathdayapi.common.response.CommonResponse;
 import com.empathday.empathdayapi.config.AWSS3Config;
 import com.empathday.empathdayapi.domain.file.FileUploadService;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
-import com.empathday.empathdayapi.api.controller.file.FileDto.PresignedUrlResponse;
+import com.empathday.empathdayapi.interfaces.file.FileDto.PresignedUrlResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -5,8 +5,10 @@ import static java.util.Collections.EMPTY_LIST;
 import com.empathday.empathdayapi.common.utils.NumberUtils;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
+import com.empathday.empathdayapi.domain.schedule.Schedule.Scope;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
+import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RetrieveCommentResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -40,18 +42,18 @@ public class ScheduleDto {
         private Long imageId;
         @NotNull(message = "emotion 정보는 필수 정보입니다.")
         private Emotion emotion;
-        private boolean isPublic;
+        private Scope scope;
         private List<String> todos;
 
         public Schedule toEntity(ScheduleImage scheduleImage) {
             if (scheduleImage == null) {
                 return Schedule.of(
-                    this.userId, this.scheduleDate, this.title, this.content, EMPTY_LIST, this.emotion, this.isPublic
+                    this.userId, this.scheduleDate, this.title, this.content, EMPTY_LIST, this.emotion, this.scope
                 );
             }
 
             return Schedule.of(
-                this.userId, this.scheduleDate, this.title, this.content, List.of(scheduleImage), this.emotion, this.isPublic
+                this.userId, this.scheduleDate, this.title, this.content, List.of(scheduleImage), this.emotion, this.scope
             );
         }
 
@@ -121,6 +123,7 @@ public class ScheduleDto {
     public static class RetrieveScheduleDetailMainResponse {
 
         private RetrieveScheduleResponse scheduleResponse;
+        private List<RetrieveCommentResponse> comments;
     }
 
     @Getter
@@ -135,9 +138,9 @@ public class ScheduleDto {
         private String content;
         private Emotion emotion;
         private String emotionImageUrl;
-        private boolean isPublic;
-        private List<ScheduleImageResponse> imageResponses;
-        private List<TodoResponse> todoResponses;
+        private Scope scope;
+        private List<ScheduleImageResponse> images;
+        private List<TodoResponse> todos;
 
         public static RetrieveScheduleResponse fromEntity(Schedule schedule) {
             return RetrieveScheduleResponse.builder()
@@ -147,9 +150,9 @@ public class ScheduleDto {
                 .content(schedule.getContent())
                 .emotion(schedule.getEmotion())
                 .emotionImageUrl(schedule.getEmotion().getEmotionImageUrl())
-                .isPublic(schedule.isPublic())
-                .imageResponses(checkImageIsNull(schedule.getScheduleImages()))
-                .todoResponses(checkTodoIsNull(schedule.getTodos()))
+                .scope(schedule.getScope())
+                .images(checkImageIsNull(schedule.getScheduleImages()))
+                .todos(checkTodoIsNull(schedule.getTodos()))
                 .build();
         }
 
@@ -176,9 +179,9 @@ public class ScheduleDto {
             this.content = response.getContent();
             this.emotion = response.getEmotion();
             this.emotionImageUrl = response.getEmotion().getEmotionImageUrl();
-            this.isPublic = response.isPublic();
-            this.imageResponses = response.getImageResponses();
-            this.todoResponses = response.getTodoResponses();
+            this.scope = response.getScope();
+            this.images = response.getImages();
+            this.todos = response.getTodos();
         }
     }
 

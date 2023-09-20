@@ -1,8 +1,8 @@
 package com.empathday.empathdayapi.domain.schedule.comment;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.empathday.empathdayapi.domain.common.DeleteStatus;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
@@ -11,7 +11,8 @@ import com.empathday.empathdayapi.domain.user.UserService;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.comment.CommentRepository;
 import com.empathday.empathdayapi.infrastructure.user.UserRepository;
-import com.empathday.empathdayapi.interfaces.schedule.ScheduleCommentDto.RegisterScheduleCommentRequest;
+import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.DeleteCommentRequest;
+import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RegisterScheduleCommentRequest;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
 import com.empathday.empathdayapi.interfaces.user.UserSignUpDto;
 import java.time.LocalDate;
@@ -100,6 +101,29 @@ class CommentServiceTest {
         assertThat(parent.getId()).isNotNull();
         assertThat(parent.getChildComment()).isNotNull();
     }
+
+    @DisplayName("1개의 댓글 삭제")
+    @Test
+    void deleteCommentOnlyOne() throws Exception {
+        // given
+        UserSignUpDto userRequest = createUser();
+        User savedUser = userService.signUp(userRequest);
+        RegisterScheduleRequest request = createScheduleRequest(LocalDate.of(2023, 9, 16), "스케줄제목", "스케줄내용", Emotion.SO_BAD);
+        Schedule savedSchedule = scheduleService.registerSchedule(request);
+
+        RegisterScheduleCommentRequest commentRequest = createCommentRequest(savedSchedule.getId(), savedUser.getId(), null, "부모댓글 등록");
+        Comment comment = commentService.registerComment(commentRequest);
+
+        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(savedUser.getId(), comment.getId());
+
+        // when
+        commentService.deleteComment(deleteCommentRequest);
+
+        // then
+        Comment findComment = commentRepository.findById(comment.getId()).get();
+        assertThat(findComment.getDeleteStatus()).isEqualTo(DeleteStatus.Y);
+    }
+
 
     private static RegisterScheduleRequest createScheduleRequest(LocalDate scheduleDate, String title, String content, Emotion emotion) {
         RegisterScheduleRequest registerScheduleRequest = RegisterScheduleRequest.builder()

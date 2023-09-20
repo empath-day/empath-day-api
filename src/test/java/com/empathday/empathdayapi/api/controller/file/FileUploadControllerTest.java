@@ -4,11 +4,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.empathday.empathdayapi.api.controller.file.FileDto.PresignedUrlResponse;
-import com.empathday.empathdayapi.common.response.CommonResponse;
 import com.empathday.empathdayapi.config.AWSS3Config;
 import com.empathday.empathdayapi.domain.file.FileUploadService;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
+import com.empathday.empathdayapi.interfaces.file.FileUploadController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;

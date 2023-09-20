@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.exception.schedule;
+package com.empathday.empathdayapi.domain.exception.comment;
 
 import static com.empathday.empathdayapi.common.response.ErrorCode.COMMENT_ENTITY_NOT_FOUND;
 

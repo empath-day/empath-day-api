@@ -11,6 +11,7 @@ import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
+import com.empathday.empathdayapi.infrastructure.schedule.comment.CommentRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.todo.TodoRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
@@ -36,10 +37,13 @@ class ScheduleServiceTest {
     @Autowired
     private ScheduleImageRepository scheduleImageRepository;
     @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
     private TodoRepository todoRepository;
 
     @AfterEach
     void tearDown() {
+        commentRepository.deleteAllInBatch();
         todoRepository.deleteAllInBatch();
         scheduleRepository.deleteAllInBatch();
         scheduleImageRepository.deleteAllInBatch();
@@ -206,8 +210,8 @@ class ScheduleServiceTest {
         assertThat(result.getTitle()).isEqualTo(title);
         assertThat(result.getContent()).isEqualTo(content);
         assertThat(result.getEmotion()).isEqualTo(emotion);
-        assertThat(result.getImageResponses()).isNull();
-        assertThat(result.getTodoResponses()).hasSize(2)
+        assertThat(result.getImages()).isNull();
+        assertThat(result.getTodos()).hasSize(2)
             .extracting("content", "isCompleted")
             .containsExactlyInAnyOrder(
                 tuple(firstTodo, false),

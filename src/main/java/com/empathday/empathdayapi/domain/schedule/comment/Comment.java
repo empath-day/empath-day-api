@@ -1,12 +1,15 @@
 package com.empathday.empathdayapi.domain.schedule.comment;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
+import com.empathday.empathdayapi.domain.common.DeleteStatus;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,6 +49,7 @@ public class Comment extends AbstractEntity {
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
+    @Builder.Default
     @OneToMany(mappedBy = "parentComment")
     private List<Comment> childComment = new ArrayList<>();
 
@@ -55,7 +59,8 @@ public class Comment extends AbstractEntity {
     private Integer likeCount;
 
     @Column(nullable = false)
-    private int deleteYn;
+    @Enumerated(EnumType.STRING)
+    private DeleteStatus deleteStatus;
 
     public static Comment initReply(Comment parentComment, User writer, Schedule schedule, String content) {
         return Comment.builder()
@@ -64,7 +69,7 @@ public class Comment extends AbstractEntity {
             .parentComment(parentComment)
             .content(content)
             .likeCount(0)
-            .deleteYn(0)
+            .deleteStatus(DeleteStatus.N)
             .build();
     }
 
@@ -74,8 +79,20 @@ public class Comment extends AbstractEntity {
             .schedule(schedule)
             .content(content)
             .likeCount(0)
-            .deleteYn(0)
+            .deleteStatus(DeleteStatus.N)
             .build();
+    }
+
+    public boolean hasParentComment() {
+        return this.parentComment != null ;
+    }
+
+    public void changeDeleteStatus() {
+        this.deleteStatus = DeleteStatus.Y;
+    }
+
+    public void modify(String content) {
+        this.content = content;
     }
 }
 

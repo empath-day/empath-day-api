@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.api.controller.file;
+package com.empathday.empathdayapi.interfaces.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

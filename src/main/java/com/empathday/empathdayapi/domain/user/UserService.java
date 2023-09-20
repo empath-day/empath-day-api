@@ -41,7 +41,7 @@ public class UserService {
 
     public User getUserInfo(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-            () -> new UserNotFoundException(ErrorCode.USER_ENTITY_NOT_FOUND)
+            () -> new UserNotFoundException()
         );
     }
 }

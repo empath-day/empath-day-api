@@ -16,6 +16,7 @@ public enum ErrorCode {
     SCHEDULE_ENTITY_NOT_FOUND("존재하지 않는 피드입니다."),
     FEED_LIKE_ENTITY_NOT_FOUND("좋아요 정보가 존재하지 않습니다."),
     COMMENT_ENTITY_NOT_FOUND("존재하지 않는 댓글입니다."),
+    DELETE_COMMENT_ONLY_WRITER("댓글 작성자만 댓글을 지울 수 있습니다."),
     ;
 
     private final String errorMsg;

@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.exception.schedule;
+package com.empathday.empathdayapi.domain.exception.schedule;
 
 import com.empathday.empathdayapi.common.exception.BaseException;
 import com.empathday.empathdayapi.common.response.ErrorCode;
