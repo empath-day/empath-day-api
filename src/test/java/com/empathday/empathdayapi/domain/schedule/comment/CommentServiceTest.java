@@ -1,5 +1,6 @@
 package com.empathday.empathdayapi.domain.schedule.comment;
 
+import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.empathday.empathdayapi.domain.common.DeleteStatus;
@@ -70,7 +71,7 @@ class CommentServiceTest {
         // then
         assertThat(comment.getId()).isNotNull();
         assertThat(comment.getParentComment()).isNull();
-        assertThat(comment.getChildComment()).isNull();
+        assertThat(comment.getChildComment()).isEmpty();
     }
 
     @DisplayName("대댓글(2뎁스) 정보를 등록합니다")
@@ -114,7 +115,7 @@ class CommentServiceTest {
         RegisterScheduleCommentRequest commentRequest = createCommentRequest(savedSchedule.getId(), savedUser.getId(), null, "부모댓글 등록");
         Comment comment = commentService.registerComment(commentRequest);
 
-        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(savedUser.getId(), comment.getId());
+        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(comment.getId(), savedUser.getId());
 
         // when
         commentService.deleteComment(deleteCommentRequest);
@@ -133,7 +134,7 @@ class CommentServiceTest {
             .content(content)
             .imageId(null)
             .emotion(emotion)
-            .isPublic(true)
+            .scope(PUBLIC)
             .todos(null)
             .build();
         return registerScheduleRequest;

@@ -1,5 +1,6 @@
 package com.empathday.empathdayapi.domain.feed.like;
 
+import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -89,7 +90,7 @@ class ScheduleLikeServiceTest {
             .content(content)
             .imageId(null)
             .emotion(emotion)
-            .isPublic(true)
+            .scope(PUBLIC)
             .todos(null)
             .build();
         return registerScheduleRequest;

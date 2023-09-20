@@ -1,10 +1,12 @@
 package com.empathday.empathdayapi.api.service.schedule;
 
+import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
 import com.empathday.empathdayapi.common.utils.NumberUtils;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
+import com.empathday.empathdayapi.domain.schedule.Schedule.Scope;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
@@ -57,7 +59,7 @@ class ScheduleServiceTest {
         String title = "스케쥴 제목";
         String content = "스케쥴 내용";
 
-        Schedule schedule = Schedule.of(1L, scheduleDate, title, content, null, Emotion.SO_BAD, true);
+        Schedule schedule = Schedule.of(1L, scheduleDate, title, content, null, Emotion.SO_BAD, PUBLIC);
 
         // when
         scheduleRepository.save(schedule);
@@ -77,7 +79,7 @@ class ScheduleServiceTest {
         String content = "";
         Emotion emotion = Emotion.SO_BAD;
 
-        Schedule schedule = Schedule.of(1L, scheduleDate, title, content, null, emotion, true);
+        Schedule schedule = Schedule.of(1L, scheduleDate, title, content, null, emotion, PUBLIC);
 
         // when
         scheduleRepository.save(schedule);
@@ -98,7 +100,7 @@ class ScheduleServiceTest {
         String title = "";
         String content = "";
         Emotion emotion = Emotion.SO_BAD;
-        Schedule schedule = Schedule.of(1L, scheduleDate, title, content, null, emotion, true);
+        Schedule schedule = Schedule.of(1L, scheduleDate, title, content, null, emotion, PUBLIC);
         Todo todo1 = Todo.of(schedule, "투두리스트1");
         Todo todo2 = Todo.of(schedule, "투두리스트2");
         schedule.addScheduleTodos(List.of(todo1, todo2));
@@ -128,7 +130,7 @@ class ScheduleServiceTest {
         assertThat(savedSchedule.getId()).isNotNull();
         assertThat(savedSchedule.getScheduleDate()).isEqualTo(scheduleDate);
         assertThat(savedSchedule.getScheduleImages()).hasSize(0);
-        assertThat(savedSchedule.isPublic()).isTrue();
+        assertThat(savedSchedule.getScope()).isEqualTo(PUBLIC);
         assertThat(savedSchedule.getTodos()).isNull();
     }
 
@@ -153,7 +155,7 @@ class ScheduleServiceTest {
         assertThat(savedSchedule.getId()).isNotNull();
         assertThat(savedSchedule.getScheduleDate()).isEqualTo(scheduleDate);
         assertThat(savedSchedule.getScheduleImages()).hasSize(1);
-        assertThat(savedSchedule.isPublic()).isTrue();
+        assertThat(savedSchedule.getScope()).isEqualTo(PUBLIC);
         assertThat(savedSchedule.getTodos()).isNull();
     }
 
@@ -179,7 +181,7 @@ class ScheduleServiceTest {
         assertThat(savedSchedule.getId()).isNotNull();
         assertThat(savedSchedule.getScheduleDate()).isEqualTo(scheduleDate);
         assertThat(savedSchedule.getScheduleImages()).hasSize(0);
-        assertThat(savedSchedule.isPublic()).isTrue();
+        assertThat(savedSchedule.getScope()).isEqualTo(PUBLIC);
         assertThat(savedSchedule.getTodos()).hasSize(2);
     }
 
@@ -257,7 +259,7 @@ class ScheduleServiceTest {
             .content(content)
             .imageId(null)
             .emotion(emotion)
-            .isPublic(true)
+            .scope(PUBLIC)
             .todos(null)
             .build();
         return registerScheduleRequest;

@@ -1,5 +1,6 @@
 package com.empathday.empathdayapi.api.controller.schedule;
 
+import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,7 +56,7 @@ public class ScheduleControllerTest {
             .content("내용")
             .imageId(0L)
             .emotion(Emotion.GOOD)
-            .isPublic(true)
+            .scope(PUBLIC)
             .todos(List.of("hihi", "hello"))
             .build();
 
