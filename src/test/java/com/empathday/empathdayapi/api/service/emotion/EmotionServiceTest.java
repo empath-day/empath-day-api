@@ -3,6 +3,7 @@ package com.empathday.empathdayapi.api.service.emotion;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+import com.empathday.empathdayapi.IntegrationTestSupport;
 import com.empathday.empathdayapi.domain.emotion.EmotionService;
 import com.empathday.empathdayapi.interfaces.emotion.EmotionDto.EmotionRetrieveResponse;
 import java.util.List;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EmotionServiceTest {
+class EmotionServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private EmotionService emotionService;

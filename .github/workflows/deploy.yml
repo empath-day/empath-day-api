@@ -61,7 +61,7 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build --stacktrace
+        run: ./gradlew clean build -Pprofile=dev --stacktrace
         shell: bash
 
       - name: Compress all report files
