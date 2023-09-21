@@ -4,6 +4,7 @@ import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import com.empathday.empathdayapi.IntegrationTestSupport;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.like.ScheduleLike.LikeStatus;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
@@ -19,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ScheduleLikeServiceTest {
+class ScheduleLikeServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ScheduleLikeService scheduleLikeService;

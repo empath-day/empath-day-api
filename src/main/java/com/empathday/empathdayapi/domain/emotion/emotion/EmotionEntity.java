@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "emotion")
+@Table(name = "emotions")
 public class EmotionEntity extends AbstractEntity {
 
     @Id

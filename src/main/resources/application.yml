@@ -54,12 +54,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5Dialect
-    open-in-view: true
 
   datasource:
-    url: jdbc:mysql://localhost:3306/empath_day?autoReconnect=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
+    url: jdbc:h2:mem:~/empathy-day
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/empath_day?autoReconnect=true
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: root

@@ -3,6 +3,7 @@ package com.empathday.empathdayapi.domain.schedule.comment;
 import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.empathday.empathdayapi.IntegrationTestSupport;
 import com.empathday.empathdayapi.domain.common.DeleteStatus;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
@@ -26,7 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
-class CommentServiceTest {
+class CommentServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserService userService;

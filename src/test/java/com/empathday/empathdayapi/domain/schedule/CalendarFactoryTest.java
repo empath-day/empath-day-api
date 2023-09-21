@@ -3,6 +3,7 @@ package com.empathday.empathdayapi.domain.schedule;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import com.empathday.empathdayapi.IntegrationTestSupport;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.DefaultCalendarInfo;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import java.time.DayOfWeek;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CalendarFactoryTest {
+class CalendarFactoryTest extends IntegrationTestSupport {
 
     @DisplayName("2023년 9월 첫째주 정보를 생성합니다.")
     @Test
