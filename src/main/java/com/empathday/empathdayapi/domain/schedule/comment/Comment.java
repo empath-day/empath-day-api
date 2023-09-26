@@ -87,7 +87,7 @@ public class Comment extends AbstractEntity {
         return this.parentComment != null ;
     }
 
-    public void changeDeleteStatus() {
+    public void changeDeleteStatusToDelete() {
         this.deleteStatus = DeleteStatus.Y;
     }
 

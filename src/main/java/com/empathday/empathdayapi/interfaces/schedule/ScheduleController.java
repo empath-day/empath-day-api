@@ -5,6 +5,7 @@ import static com.empathday.empathdayapi.common.response.CommonResponse.success;
 import com.empathday.empathdayapi.common.response.CommonResponse;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,12 +32,10 @@ public class ScheduleController {
         description = "스케줄을 등록할 수 있습니다."
     )
     @PostMapping("/api/v1/schedules")
-    public CommonResponse<String> createSchedule(
+    public CommonResponse<RegisterScheduleResponse> createSchedule(
         @Valid @RequestBody RegisterScheduleRequest request
     ) {
-        scheduleService.registerSchedule(request);
-
-        return success("OK");
+        return success(scheduleService.registerSchedule(request));
     }
 
     @Operation(

@@ -9,8 +9,9 @@ import com.empathday.empathdayapi.domain.schedule.todo.Todo;
 import com.empathday.empathdayapi.domain.exception.schedule.ScheduleNotFoundException;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleImageRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
-import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RetrieveCommentResponse;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.RetrieveCommentResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleDetailMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleResponse;
@@ -54,7 +55,7 @@ public class ScheduleService {
      * @return
      */
     @Transactional
-    public Schedule registerSchedule(RegisterScheduleRequest request) {
+    public RegisterScheduleResponse registerSchedule(RegisterScheduleRequest request) {
         if (request.isEmotionBlank()) {
             throw new InvalidParamException(REQUIRED_EMOTION);
         }
@@ -72,7 +73,7 @@ public class ScheduleService {
             schedule.addScheduleTodos(requestToTodoList(request, schedule));
         }
 
-        return scheduleRepository.save(schedule);
+        return RegisterScheduleResponse.of(scheduleRepository.save(schedule));
     }
 
     private static List<Todo> requestToTodoList(RegisterScheduleRequest request, Schedule schedule) {

@@ -12,10 +12,12 @@ import com.empathday.empathdayapi.infrastructure.schedule.ScheduleRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.comment.CommentQueryDSLRepository;
 import com.empathday.empathdayapi.infrastructure.schedule.comment.CommentRepository;
 import com.empathday.empathdayapi.infrastructure.user.UserRepository;
-import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.DeleteCommentRequest;
-import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RegisterScheduleCommentRequest;
-import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RetrieveCommentResponse;
-import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.ModifyCommentRequest;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.DeleteCommentRequest;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.RegisterCommentRequest;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.RegisterCommentResponse;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.RetrieveCommentResponse;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.ModifyCommentRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,36 +41,38 @@ public class CommentService {
     /**
      * 댓글, 대댓글 등록
      *
+     * @param scheduleId
      * @param request
      * @return
      */
     @Transactional
-    public Comment registerComment(RegisterScheduleCommentRequest request) {
-        User writer = getUser(request.getUserId());
+    public RegisterCommentResponse registerComment(Long scheduleId, RegisterCommentRequest request) {
+        User writer = findUser(request.getUserId());
 
-        Schedule schedule = getSchedule(request.getScheduleId());
+        Schedule schedule = findSchedule(scheduleId);
 
+        // 자식 댓글 등록
         if (request.hasParentComment()) {
             Comment parentComment = getParentComment(request.getCommentParentId());
             Comment reply = Comment.initReply(parentComment, writer, schedule, request.getContent());
             saveComment(reply);
 
-            return reply;
+            return RegisterCommentResponse.fromEntity(reply);
         }
 
         Comment comment = Comment.init(writer, schedule, request.getContent());
         saveComment(comment);
 
-        return comment;
+        return RegisterCommentResponse.fromEntity(comment);
     }
 
-    private User getUser(Long userId) {
+    private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(
             () -> new UserNotFoundException()
         );
     }
 
-    private Schedule getSchedule(Long scheduleId) {
+    private Schedule findSchedule(Long scheduleId) {
         return scheduleRepository.findById(scheduleId).orElseThrow(
             () -> new ScheduleNotFoundException()
         );
@@ -138,19 +141,19 @@ public class CommentService {
             throw new CommentException(ErrorCode.DELETE_COMMENT_ONLY_WRITER);
         }
 
-        comment.changeDeleteStatus();
+        comment.changeDeleteStatusToDelete();
 
-        if (!CollectionUtils.isEmpty(comment.getChildComment())) {
+        /*if (!CollectionUtils.isEmpty(comment.getChildComment())) {
         } else {
-            getDeletableAncestorComment(comment).changeDeleteStatus();
-        }
+            getDeletableAncestorComment(comment).changeDeleteStatusToDelete();
+        }*/
     }
-    private Comment getDeletableAncestorComment(Comment comment) {
+    /*private Comment getDeletableAncestorComment(Comment comment) {
         Comment parent = comment.getParentComment();
         if(parent != null && parent.getChildComment().size() == 1 && parent.getDeleteStatus() == DeleteStatus.Y)
             return getDeletableAncestorComment(parent);
         return comment;
-    }
+    }*/
 
 
     private Comment getCommentWithParent(Long commentId) {
@@ -165,16 +168,21 @@ public class CommentService {
      * @param
      */
     @Transactional
-    public void modifyComment(ModifyCommentRequest request) {
-        Comment comment = findCommentById(request.getCommentId());
+    public RetrieveCommentResponse modifyComment(Long scheduleId, Long commentId, ModifyCommentRequest request) {
+        Schedule findSchedule = findSchedule(scheduleId);
+
+        Comment comment = findCommentByScheduleIdAndCommentId(findSchedule.getId(), commentId);
+
         if (!comment.getUserId().equals(request.getUserId())) {
             throw new CommentException(ErrorCode.DELETE_COMMENT_ONLY_WRITER);
         }
 
         comment.modify(request.getContent());
+
+        return RetrieveCommentResponse.fromEntity(comment);
     }
 
-    private Comment findCommentById(Long commentId) {
+    private Comment findCommentByScheduleIdAndCommentId(Long scheduleId, Long commentId) {
         return commentRepository.findByIdAndDeleteStatus(commentId, DeleteStatus.N).orElseThrow(
             () -> new CommentNotFoundException()
         );

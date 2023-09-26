@@ -87,10 +87,9 @@ public class CalendarFactory {
     }
 
     private static List<Schedule> filterHavingSchedule(List<Schedule> findSchedule) {
-        List<Schedule> isNotNullSchedule = findSchedule.stream()
+        return findSchedule.stream()
             .filter(schedule -> Objects.nonNull(schedule))
             .collect(Collectors.toList());
-        return isNotNullSchedule;
     }
 
     private static Map<LocalDate, RetrieveScheduleMainResponse> getDateMap(List<RetrieveScheduleMainResponse> oneWeekCalendar) {

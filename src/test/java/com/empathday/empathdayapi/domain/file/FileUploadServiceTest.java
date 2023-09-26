@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.api.domain.file;
+package com.empathday.empathdayapi.domain.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

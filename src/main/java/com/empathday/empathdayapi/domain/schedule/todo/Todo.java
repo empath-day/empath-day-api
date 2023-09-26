@@ -3,6 +3,7 @@ package com.empathday.empathdayapi.domain.schedule.todo;
 import static javax.persistence.FetchType.LAZY;
 
 import com.empathday.empathdayapi.domain.common.AbstractEntity;
+import com.empathday.empathdayapi.domain.common.DeleteStatus;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,12 +37,14 @@ public class Todo extends AbstractEntity {
     private String content;
 
     private boolean isCompleted;
+    private DeleteStatus deleteStatus;
 
     @Builder
-    private Todo(Schedule schedule, String content, boolean isCompleted) {
+    private Todo(Schedule schedule, String content, boolean isCompleted, DeleteStatus deleteStatus) {
         this.schedule = schedule;
         this.content = content;
         this.isCompleted = isCompleted;
+        this.deleteStatus = deleteStatus;
     }
 
     public static Todo of(Schedule schedule, String content) {
@@ -49,6 +52,7 @@ public class Todo extends AbstractEntity {
             .schedule(schedule)
             .content(content)
             .isCompleted(false)
+            .deleteStatus(DeleteStatus.N)
             .build();
     }
 

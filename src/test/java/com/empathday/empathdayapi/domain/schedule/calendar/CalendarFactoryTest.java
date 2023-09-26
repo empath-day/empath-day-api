@@ -1,9 +1,10 @@
-package com.empathday.empathdayapi.domain.schedule;
+package com.empathday.empathdayapi.domain.schedule.calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import com.empathday.empathdayapi.IntegrationTestSupport;
+import com.empathday.empathdayapi.domain.schedule.CalendarFactory;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.DefaultCalendarInfo;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RetrieveScheduleMainResponse;
 import java.time.DayOfWeek;

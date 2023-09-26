@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.api.controller.file;
+package com.empathday.empathdayapi.interfaces.file;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -3,12 +3,13 @@ package com.empathday.empathdayapi.interfaces.schedule;
 import static java.util.Collections.EMPTY_LIST;
 
 import com.empathday.empathdayapi.common.utils.NumberUtils;
+import com.empathday.empathdayapi.domain.common.DeleteStatus;
 import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
 import com.empathday.empathdayapi.domain.schedule.Schedule.Scope;
 import com.empathday.empathdayapi.domain.schedule.scheduleimage.ScheduleImage;
 import com.empathday.empathdayapi.domain.schedule.todo.Todo;
-import com.empathday.empathdayapi.interfaces.comment.ScheduleCommentDto.RetrieveCommentResponse;
+import com.empathday.empathdayapi.interfaces.comment.CommentDto.RetrieveCommentResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -87,6 +88,58 @@ public class ScheduleDto {
     @Getter
     @ToString
     @NoArgsConstructor
+    public static class RegisterScheduleResponse {
+
+        private Long id;
+        private LocalDate scheduleDate;
+        private String title;
+        private String content;
+        private Scope scope;
+        private Emotion emotion;
+        private Long userId;
+        private List<RetrieveCommentResponse> comments;
+        private List<ScheduleImageResponse> images;
+        private List<TodoResponse> todos;
+        private DeleteStatus deleteStatus;
+
+        @Builder
+        private RegisterScheduleResponse(
+            Long id, LocalDate scheduleDate, String title,
+            String content, Scope scope, Emotion emotion,
+            List<RetrieveCommentResponse> comments, Long userId, List<ScheduleImageResponse> images,
+            List<TodoResponse> todos, DeleteStatus deleteStatus
+        ) {
+            this.id = id;
+            this.scheduleDate = scheduleDate;
+            this.title = title;
+            this.content = content;
+            this.scope = scope;
+            this.emotion = emotion;
+            this.comments = comments;
+            this.userId = userId;
+            this.images = images;
+            this.todos = todos;
+            this.deleteStatus = deleteStatus;
+        }
+
+        public static RegisterScheduleResponse of(Schedule schedule) {
+            return RegisterScheduleResponse.builder()
+                .id(schedule.getId())
+                .scheduleDate(schedule.getScheduleDate())
+                .title(schedule.getTitle())
+                .content(schedule.getContent())
+                .scope(schedule.getScope())
+                .emotion(schedule.getEmotion())
+                .userId(schedule.getUserId())
+                .comments(RetrieveCommentResponse.fromEntity(schedule.getComments()))
+                .images(ScheduleImageResponse.fromEntity(schedule.getScheduleImages()))
+                .todos(TodoResponse.fromEntity(schedule.getTodos()))
+                .build();
+        }
+    }
+    @Getter
+    @ToString
+    @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class RetrieveScheduleMainResponse {
 
@@ -132,6 +185,7 @@ public class ScheduleDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RetrieveScheduleResponse {
+
         private Long id;
         private LocalDate scheduleDate;
         private String title;
@@ -190,10 +244,15 @@ public class ScheduleDto {
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class ScheduleImageResponse {
-        private Long id;
 
+        private Long id;
         private String filename;
+
         public static List<ScheduleImageResponse> fromEntity(List<ScheduleImage> scheduleImages) {
+            if (CollectionUtils.isEmpty(scheduleImages)) {
+                return EMPTY_LIST;
+            }
+
             return scheduleImages.stream()
                 .filter(Objects::nonNull)
                 .map(image -> ScheduleImageResponse.of(image.getId(), image.getFilename()))
@@ -207,15 +266,19 @@ public class ScheduleDto {
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class TodoResponse {
+
         private Long id;
         private String content;
-
         private boolean isCompleted;
+
         public static List<TodoResponse> fromEntity(List<Todo> todos) {
+            if (CollectionUtils.isEmpty(todos)) {
+                return EMPTY_LIST;
+            }
+
             return todos.stream()
                 .map(todo -> TodoResponse.of(todo.getId(), todo.getContent(), todo.isCompleted()))
                 .collect(Collectors.toList());
         }
-
     }
 }

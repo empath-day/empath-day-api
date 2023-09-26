@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.api.controller.schedule;
+package com.empathday.empathdayapi.interfaces.schedule;
 
 import static com.empathday.empathdayapi.domain.schedule.Schedule.Scope.PUBLIC;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -68,7 +68,6 @@ public class ScheduleControllerTest {
             )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.result").value("SUCCESS"))
-            .andExpect(jsonPath("$.data").value("OK"))
             .andExpect(jsonPath("$.message").doesNotExist())
             .andExpect(jsonPath("$.errorCode").doesNotExist());
     }

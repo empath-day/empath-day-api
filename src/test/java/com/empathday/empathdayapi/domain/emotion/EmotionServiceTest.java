@@ -1,4 +1,4 @@
-package com.empathday.empathdayapi.api.service.emotion;
+package com.empathday.empathdayapi.domain.emotion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;

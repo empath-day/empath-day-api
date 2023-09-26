@@ -6,12 +6,12 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 import com.empathday.empathdayapi.IntegrationTestSupport;
 import com.empathday.empathdayapi.domain.emotion.emotion.Emotion;
-import com.empathday.empathdayapi.domain.schedule.like.ScheduleLike.LikeStatus;
-import com.empathday.empathdayapi.domain.schedule.Schedule;
 import com.empathday.empathdayapi.domain.schedule.ScheduleService;
+import com.empathday.empathdayapi.domain.schedule.like.ScheduleLike.LikeStatus;
 import com.empathday.empathdayapi.domain.schedule.like.ScheduleLikeService;
 import com.empathday.empathdayapi.infrastructure.schedule.feed.ScheduleLikeRepository;
 import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleRequest;
+import com.empathday.empathdayapi.interfaces.schedule.ScheduleDto.RegisterScheduleResponse;
 import java.time.LocalDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +45,7 @@ class ScheduleLikeServiceTest extends IntegrationTestSupport {
         Emotion emotion = Emotion.SO_BAD;
         RegisterScheduleRequest request = createScheduleRequest(scheduleDate, title, content, emotion);
 
-        Schedule savedSchedule = scheduleService.registerSchedule(request);
+        RegisterScheduleResponse savedSchedule = scheduleService.registerSchedule(request);
 
         // when
         scheduleLikeService.likeSchedule(savedSchedule.getId(), userId);
@@ -69,7 +69,7 @@ class ScheduleLikeServiceTest extends IntegrationTestSupport {
         Emotion emotion = Emotion.SO_BAD;
         RegisterScheduleRequest request = createScheduleRequest(scheduleDate, title, content, emotion);
 
-        Schedule savedSchedule = scheduleService.registerSchedule(request);
+        RegisterScheduleResponse savedSchedule = scheduleService.registerSchedule(request);
         scheduleLikeService.likeSchedule(savedSchedule.getId(), userId);
 
         // when
